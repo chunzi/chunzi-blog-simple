@@ -1,0 +1,13 @@
+File::LibMagic on Ununtu
+
+开发环境需要这个模块，可在我的 Ubuntu 上安装时出错，看了文档知道这是一个对 <a href="ftp://ftp.astron.com/pub/file/">file-4.*</a> 这个程序的封装。于是下载下来 configure，居然报告：
+<pre>c compiler cannot create executables</pre>
+解决办法是：
+<pre>sudo apt-get install gcc libc6-dev</pre>
+然后：
+<pre>cd file-4.20
+./configure
+make
+make install
+cpan install File::LibMagic</pre>
+我原先就已经有了 <code>gcc</code> 不过没有 <code>libc6-dev</code> 。为什么 Ubuntu 没有对应的 package 可以用呢？以后有空看看怎么自己做，呵呵。

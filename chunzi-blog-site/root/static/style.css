@@ -1,0 +1,37 @@
+body table{margin: 10px;font-family:arial,sans-serif;font-size:0.8em;}
+img{border:0;}
+a:link{text-decoration:none;color:#36c}
+a:visited{text-decoration:none;color:#36c}
+a:hover{text-decoration:underline;cursor:pointer}
+a:active{text-decoration:underline}
+li{line-height: 1.4em;}
+br.clear{clear:all;}
+
+#header{font-size:1.6em;font-weight:bold;color:#666; height: 30px;}
+#container{margin: 10px; margin-right:20px;}
+#sidebar_container{width: 250px; background: url(/static/images/sidebarbg.png) repeat-y left; padding-left:20px;}
+
+
+#posts ul{ margin:10px;}
+
+.post {margin-top:10px;background: url(/static/images/posttitle.png) no-repeat; border-top: solid 1px #f6f6f6;}
+.post .title{font-size:1.6em;line-height:1.6em;font-weight:bold;margin-top: 3px; margin-left:5px;}
+.post .date{font-size:0.8em;color:silver;text-align:right;}
+.post .content{margin: 10px;line-height: 1.3em;}
+.post li { list-style-image: url(/static/images/bullet.gif);}
+
+pre{ line-height: 1.2em; padding: 10px; color: #eee; background: #333;}
+code{ color: maroon; }
+
+.post_pn{font-size:1.2em;color:#666;}
+.post_prev{text-align:left;float:left;}
+.post_next{text-align:right;float:right;}
+
+.pages{text-align: center;}
+.page {width: 10px; margin-right: 5px;}
+.page_here a{ color: black;font-size: 1.8em; color: #666; }
+
+#twitter_div ul { margin:0;padding-left:10px; }
+#twitter_div li { margin:0; padding:0; list-style-image: url(/static/images/bullet.gif);}
+
+

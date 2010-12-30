@@ -1,0 +1,30 @@
+mkfifo 和 script
+
+刚才说到 <code>script</code> 可以录下操作，并可以稍后回放，后来发现结合 <code>mkfifo</code> 还可以实时分享。有点象 net meeting 或者 VMware 的共享终端。
+
+<pre>$ mkfifo bar
+$ file bar
+bar: fifo (named pipe)
+$ ls -l bar
+prw-r--r-- 1 chunzi chunzi 0 2007-02-14 16:45 bar</pre>
+
+我用 <code>mkfifo</code> 新建了一个文件 bar，然后用 file 命令查看这个文件的信息，它告诉我这是 <code>fifo</code> 类型，也叫作 named pipe 。然后我在 <code>ls -l</code> 看看，发现最前面是 p ，猜想这个 p 就是 pipe 的那个 p。
+
+先另外开一个终端，执行：
+
+<pre>$ cat bar</pre>
+
+当然什么都没有输出，也没有退出，好，现在在原先的终端窗口中用 <code>-f</code> 参数指定 <code>script</code> 在写数据的时候立即 flush 到日志文件 <code>bar</code>：
+
+<pre>$ script -f bar
+Script started, file is bar</pre>
+
+这时候你在 cat 的那个窗口中看到了什么？试着在原先的窗口做些操作，同时看看 <code>cat</code> 窗口中发生了什么？其实你先 <code>script -f bar</code> 起来，然后再去 <code>cat</code> 也行。任何一个窗口中退出都会使另一个结束。
+
+最后再来看看 fifo 文件类型的说明：它允许独立的进程通讯。一个进程打开 FIFO 文件进行写操作，而另一个进程对之进行读操作，然后数据便可以如同在 shell 或者其它地方常见的的匿名管道一样流线执行。
+
+所以把这种文件想象成管道就好了！你看，我们其实好比是
+
+<pre>script -f | cat</pre>
+
+在本地的用户通过 <code>script</code> 把当前的操作信息，通过管道，传给远处的人 <code>cat</code> 出来看，多么美妙啊～

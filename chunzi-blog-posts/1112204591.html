@@ -1,0 +1,9 @@
+Catalyst 5.00 on svn
+
+下午还在看到他们说什么 cat5 ，参考更新后的 MojoMojo 代码后竟然发现其中的 action 写法发生了重大变化。原来用一个 action 名称指向一个匿名 code ，现在则直接使用 sub method : attribute {} 的形式，原先的名称（path，正则表达式等）都放在函数的属性信息中加以解读。
+
+原来的 Maypole 就是这种方式，不过它仅仅用以加 Private/Public 以表征是否可以被 web 请求的 uri 映射。Catalyst 5 的做法则更进一步。代码看起来也更舒服些，并且可以传递额外的参数了。
+
+此外细加察看源代码，发生变化的地方非常之多，req/res 都增加了若干方法。等等不一而足，并且将新增加 namespace 以及 controller 的继承。
+
+不过版本 5 尚未正式发布，可能要到本周末。

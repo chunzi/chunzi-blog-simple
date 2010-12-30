@@ -1,0 +1,86 @@
+<html>
+<head>
+	<title>Chunzi's blog</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="[% c.uri_for('/static/style.css') %]" type="text/css" />
+	<script type="text/javascript" src="[% c.uri_for('/static/js/jquery-1.2.3.pack.js') %]"></script>
+	<script>var $j = jQuery.noConflict();</script>
+</head>
+<body>
+
+<div id="header"><a href="/">Chunzi</a></div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="98%">
+<tr><td valign="top" width="50%" style="padding:10px;">
+
+<div id="preview">
+	
+</div>
+
+</td>
+<td valign="top" width="50%" style="padding:10px;background:#f6f6f6;">
+
+<form name="write-post" action="[% c.uri_for("/write") %]" method="post">
+<input type="hidden" name="uid" value="[% uid %]" id="uid" />
+
+	<textarea id="content" name="content" rows="20" style="width:100%; border: solid 2px #d6d6d6; padding: 5px; font-size: 2em;">[% content %]</textarea>
+
+	<div style="margin-top: 10px;">
+		<div style="float:left;">[% uid %]</div>
+		<div style="float:right;">
+		<select id="format" name="format">
+			<option value="text">text</option>
+			<option value="html">html</option>
+			<option value="textile">textile</option>
+			<option value="markdown">markdown</option>
+			<option value="pod">pod</option>
+		</select>
+		<input type="submit" name="preview" value="预览" />
+		<input type="submit" name="publish" value="发布" />
+		</div>
+		<br class="clear">
+	</div>
+</form>	
+
+
+</td>
+</tr>
+</table>
+
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+	$j('#format').val( '[% format %]' );
+
+	function autosave(){ 
+		var t = setTimeout("autosave()", 2000);
+
+		var format = $j("#format").val();
+		var content = $j("#content").val();
+
+		if ( content.length > 0 ){ 
+			$j.ajax({
+				type: "POST", 
+				url: "[% c.uri_for("/preview") %]", 
+				data: "uid=[% uid %]&format=" + encodeURIComponent(format) + 
+						"&content=" + encodeURIComponent(content), 
+				cache: false, 
+				success: function(message){ 
+					$j('#preview').html( message );
+				} 
+			}); 
+		}
+	}
+
+	$j(document).ready(function(){ 
+		autosave(); 
+	});
+
+// ]]>
+</script>
+
+</body>
+</html>
+
+
+
+

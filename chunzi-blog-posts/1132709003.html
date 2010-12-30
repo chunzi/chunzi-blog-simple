@@ -1,0 +1,11 @@
+Catalyst::Plugin::Redirect 0.01
+
+Catalyst 本身就提供了 $c-&gt;res-&gt;redirect("..."); 的用法。不过这个 redirect 是全局的。如果 /admin 那就 redirect 到 http://example.com/admin 。如果你的应用直接部署在域名的根路径下不会有问题。但如果你部署在 /myapp 下面的话 $c-&gt;res-&gt;redirect('/admin') 会重定向到 http://example.com/admin 而非预期的 http://example.com/myapp/admin 。
+
+于是有了 <a href="http://search.cpan.org/~shot/Catalyst-Plugin-Redirect-0.01/lib/Catalyst/Plugin/Redirect.pm">Catalyst::Plugin::Redirect</a> 。
+
+这回你可以用 $c-&gt;redirect() 来做。他封装了 $c-&gt;res-&gt;redirect();
+
+当你给出的 url 是 http 开头的，或者不是 / 开头的 url 的话，直接交给 $c-&gt;res-&gt;redirect 来处理。但当给出的 url 是以 / 开头的话，则重新构造目标 url 。假设部署在 http://example.com/myapp/chunzi 下面，给出的 url 为 /admin ，则重定向到 /myapp/chunzi/admin 。
+
+很简单，不过还是比较有用，其实完全可以放到 core 里面而不是作为一个 plugin ，呵呵。

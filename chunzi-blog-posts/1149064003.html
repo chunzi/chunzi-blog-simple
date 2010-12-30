@@ -1,0 +1,9 @@
+AdWords API: 提交更新 Criterion 时的错误和解决办法
+
+重构代码的过程中，发现原来可以工作的代码返回了错误。错误是 Google API 返回的：Abstract keyValue without superclass.
+
+因为要更新一组 Criterion ，在重构的过程中，阅读文档，去掉了文档中没有提到的必要元素：criterionType。然后在极慢的网速中等待不断的 API 交互后，总还是报错。阅读了邮件组中的两个相关会话，尝试了各种可能性后，还是未果。
+
+终于，在分析别人的 xml 交互文档后，注意到 criterionType 这个字段。这才恍然大悟 -- Criterion 是抽象类，有两个派生类 Keyword 和 Website。Abstract keyValue without superclass 所要说的就是它不知道你这个 Criterion 到底是哪一个子类（我被 KeyValue 吸引过去了，没有仔细考虑 superclass）。我觉得这点有些弱智，既然提供了 Criterion 的 id 不就什么都清楚了么，何苦同时提交 CriterionType 呢。（没有测试过如果提交错误的 Type 值会发生什么。应该会报错，既然会报错，必定经过了检验，必定取出过原始数据，那又何必再次提交？）正是这个看起来不该是这样的问题却恰恰成为了问题。
+
+或许 Google 处于性能优化的考虑，不过也该在文档中说明清楚啊，害得我浪费了 2 个多小时。

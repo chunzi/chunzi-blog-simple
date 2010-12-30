@@ -1,0 +1,12 @@
+vpnclient4.8 on Ubuntu 7.04 Beta
+
+Ubuntu 7.04 Beta 中无法安装 Cisco 的 vpnclient4.8，报错：
+
+<pre>linuxcniapi.c:12:26: 错误： linux/config.h：No such file or directory</pre>
+
+这让我很郁闷。前些天同事在公司也遇到这个问题，猜想是内核升级后的兼容问题。不过当时有任务在身，没有时间纠缠。今天再试了试，确定没有 4.9 的新版本，然后 google，找到解决办法：
+
+<pre>$ wget http://www.tuxx-home.at/projects/cisco-vpnclient/vpnclient-linux-2.6.19.diff
+$ patch -p0 < vpnclient-linux-2.6.19.diff
+$ cd vpnclient
+$ sudo ./vpn_install</pre>

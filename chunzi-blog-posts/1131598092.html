@@ -1,0 +1,23 @@
+Catalyst-5.49_04
+
+可能是最后一次的 Catalyst 5.50 之前的测试版本。如果 CPAN 上还没有，可以到这里下载
+
+<a href="http://pause.perl.org/incoming/Catalyst-5.49_04.tar.gz">http://pause.perl.org/incoming/Catalyst-5.49_04.tar.gz</a>
+
+本次更新：
+
+         - 现在 context, dispatcher, engine, request 和 response 类都可配置
+         - 增加了 $c-&gt;stack.
+         - 修复了 dispatcher （忽略未知的 action 属性）
+         - 改善了启动时调试日志的格式
+         - 更新了内建的重起服务器（在 win32 体系中）
+         - 客户端关闭浏览器时，停止继续从文件句柄读取并输出数据流
+         - 增加了 $c-&gt;controller, $c-&gt;model 和 $c-&gt;view 快捷方式
+         - 改用 Text::SimpleTable.
+
+如果你用 mod_perl 的话，需要更新为最新的 Catalyst::Engine::Apache (0.99002) 。
+
+此外还需要安装以下模块
+
+  HTTP::Body 0.4
+  Text::SimpleTable

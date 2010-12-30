@@ -1,0 +1,13 @@
+Wiki 格式
+
+当初构建 wiki.perlchina.org 的时候用的是 Instiki ，它提供了三种标签格式供选择，我选了 Textile 。
+
+要在 web 上显示良好的格式，你可以直接写 html ，不过这不是人人都会的事情；你可以用所见即所得的 web 编辑器，不过最终给出的是毫无语义和规范的一堆 html 代码而已；你可以用 XML + XSLT 来写良好格式的文档，DocBook 就是这样做的，不过写起那些臃肿恼人的 XML 标签着实是一件痛苦的事情，当然你可以用 XML 编辑软件来做，不过还是不能在 web 上随心所欲的工作。
+
+许多 wiki 实现都提供了各种各样的标签规范，通过它们，我们可以简便快捷的写出能够被良好格式化的文本文档。这些标签规范，通过一些规则（像词法分析器吗？），将文本转化为其他的（大多为 XHTML ）格式。既能方便修改和编撰，又能即时看到排版效果。像这样的标签规范多得数不胜数，Perl 的 Pod 也可以算一个。各有所长。
+
+如果我写 wiki ，会用哪一个呢？或者说哪一个标签规范用最少的字符和按键（包括避免 SHIFT + ）能够最大程度的快速格式化文本呢？这让我想到了霍夫曼编码。很简单的道理，用户使用频度高的那些格式化，应该用最少的格式化形式。
+
+Kwiki 社区中有人提出了 <a href="http://www.kwiki.org/?WaflProposal">WAFL （Wiki Abstract Formatting Langauage）</a>的概念，所谓抽象，就是要把格式形式的模式匹配过程拿出来可以自己定义。类似的，还有 <a href="http://www.wikiservice.at/prowiki/wiki.cgi?CdmlElements">CDML（Content Description Markup Language ）</a> 。这里有一篇关于 wiki 格式的<a href="http://microformats.org/wiki/wiki-formats">综合阐述</a>，值得一读。
+
+有个 Perl 模块 <a href="http://search.cpan.org/~chromatic/Text-WikiFormat-0.77/lib/Text/WikiFormat.pm">Text::WikiFormat</a> 可以将 wiki 格式转换为其他格式（HTML，DocBook，XML，POD 等等），而具体的 wiki 格式可以自己定义（0.70 版本以后）。该模块还在发展中，不过基本的东西都已经可用了。此外，<a href="http://search.cpan.org/~tima/Text-Tiki-0.73/Tiki.pm">Text::Tiki</a> 模块也可作参考，不过它是完全自己实现所有的分析和处理引擎的。

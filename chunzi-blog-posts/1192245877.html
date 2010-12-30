@@ -1,0 +1,10 @@
+修改 ubuntu 下默认使用的文本编辑器
+
+当 crontab  -e 的时候总会出来 nano 的编辑器，不习惯，就会手忙脚乱，或者诚惶诚恐。一直没记住怎么修改这个设置，刚巧看到，顺便记下。
+
+<code>rm -f /etc/alternatives/editor
+ln -s /usr/bin/vi /etc/alternatives/editor</code>
+
+另外还可以使用交互式的管理工具选择设定（Thanks Jayden Suen）:
+
+<code>update-alternatives --config editor</code>

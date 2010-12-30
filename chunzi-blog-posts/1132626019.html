@@ -1,0 +1,21 @@
+JSON
+
+<a href="http://www.crockford.com/JSON/">http://www.crockford.com/JSON/</a>说到数据交换，大体上我们的第一反应就是 XML 。严谨规范。Java 的世界里面如果不用 XML 来配置或者部署，就免不了有血统不纯的嫌疑。不过我不喜欢 XML ，好啰嗦。
+
+然后在我们的应用中喜欢用 YAML 。一种人类可以直接读懂和修改的数据交换格式。它可以很简单，比 windows 下面的 ini 配置文件还简单，也可以很复杂，你可以把你的 Perl 代码中的对象序列化到 YAML 文件里，然后在 Java 里面构造出同样数据结构的 Java 对象来。让人爽得不行。
+
+现在出来了个 JSON ，叫做 JavaScript Object Notation 。<a href="http://www.crockford.com/JSON/">这里有篇介绍</a> 。而 CPAN 上也有一个 Perl 模块 <a href="http://search.cpan.org/~makamaka/JSON-1.01/">JSON</a>，用来把 Perl 的数据结构转化为 JSON 。
+
+JSON 有什么用呢？既然它是一个数据交换格式，我们就可以通过它来做比如远程调用。XMLRPC？现在可以 <a href="http://json-rpc.org/">json-rpc</a> 了。
+
+现在广泛运用和讨论的 Ajax 技术，在后端从服务器取回来的响应一般有以下几种应用：
+
+<ul>
+<li>返回的内容（html 代码片断）直接更新为 DOM 中某个元素的 innerHTML </li>
+<li>返回一段 Javascript 然后在客户端浏览器上 eval 运行</li>
+<li>返回一段 XML 文档，通过客户端对该 XML 文档的解析来同步更新多个 DOM 元素或者作出各种响应。</li>
+</ul>
+
+现在好了，我们可以返回 JSON 代码，然后通过客户端的 javascript 直接将它转化为 Javascript 的对象和数据，然后做各种你想要做的事情。我不得不说很酷。
+
+目前公司的代理平台项目，我本打算做一个类似 api.xxx.com 的站点，提供 http post 请求，返回 xml 响应，以便客户端的 js （像 Rico 这样的 Ajax 引擎）来分析并处理。还好尚未有时间实施，看来用 JSON 更妥。

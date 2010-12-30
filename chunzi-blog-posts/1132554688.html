@@ -1,0 +1,18 @@
+Catalyst-5.57
+
+<a href="http://search.cpan.org/~agrundma/Catalyst-5.57/">Catalyst 5.57</a> 刚刚发布。
+
+    - 更新了 uri_for ，现在可以接受 undef 的 action 了
+         - 改用 Module::Install
+         - 为了方便编辑，重新命名了测试脚本
+         - 文档重构
+         - 把 -nonew 改名为 -force
+         - 现在开始支持 PAR 打包了
+         - 对 HTTP 引擎增加了对 keep-alive 的支持，并修复若干问题
+         - 为 FastCGI 引擎增加了后台运行的选项
+
+此外，同期发布的还有 <a href="http://search.cpan.org/~sri/Task-Catalyst-0.01/">Task::Catalyst</a> 。有点类似 Bundle::Catalyst 主要目的是帮助你一下在安装好所有常见的 Catalyst 应用所需要的相关模块。
+
+<pre>perl -MCPAN -e 'install Task::Catalyst'</pre>
+
+Task::* 模块的目的是要取代 Bundle 机制。看看 <a href="http://search.cpan.org/~adamk/Task/lib/Task.pm">Task</a> 的文档。

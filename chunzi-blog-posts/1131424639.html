@@ -1,0 +1,11 @@
+Plugin: UploadProgress, JSAN, upcoming
+
+看到 <a href="http://dev.catalyst.perl.org">dev.catalyst.perl.org</a> 中有两个新的 Plugin 。
+
+<strong>Catalyst::Plugin::UploadProgress</strong>
+
+上传文件还是和以前一样处理，在表单提交的时候，帮定一个 Ajax 请求，然后返回这个 Plugin 计算出来的上传进度。当然每次请求都有一个 upload_id ，通过它来识别相关的文件。返回的 view 是 c.progress 的相关数据，当然也可以根据这些数据自己作一个 bar 来展示（不断更新 bar 对象的宽度）。
+
+<strong>Catalyst::Plugin::JSAN</strong>
+
+刚认识了 JSAN 就看到了（其实就算之前看到也不会在意）。这个 Plugin 主要东西都在 Helper 里面。通过 <code>script/myapp_create.pl JSAN</code> 会在 script/ 下面生成一个 myapp_jsan.pl 的脚本。然后你可以通过这个脚本从 JSAN 上下载并安装到该项目的 [home]/root/static/js 目录中（如果环境变量 $ENV{JSAN_PREFIX} 没有设置的话）。

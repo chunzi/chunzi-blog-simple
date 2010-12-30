@@ -1,0 +1,18 @@
+Ubuntu 下看电视
+
+我喜欢看的也就是纪实频道了。接下来是新闻，吃饭的时候可能会看《开心公寓》或者《老娘舅》。
+
+偶尔看到<a href="http://dengpeng.name/blog/2006/12/07/gsopcast/">介绍</a>使用 p2p 的方式看电视，自然小试一把：
+
+<pre>sudo apt-get install libstdc++5 libgtk2.0-dev libasound2-dev checkinstall
+wget http://download.sopcast.com/download/sp-sc.tgz
+tar zxvf sp-sc.tgz
+sudo cp ./sp-sc/sp-sc /usr/local/bin/
+wget http://dengpeng.name/upload/gsopcast_0.2.10-1_i386.deb
+sudo gdebi gsopcast_0.2.10-1_i386.deb</pre>
+
+这个时候就可以打开客户端：
+
+<pre>$ gsopcast</pre>
+
+从里面选频道，然后就可以在 mplayer 里面看电视了。

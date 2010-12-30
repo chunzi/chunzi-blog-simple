@@ -1,0 +1,9 @@
+修复 Permalink
+
+感谢 cnhackTNT 的提醒，在我更新 blog 后设定了当前的 Permalink，然而我想当然的没有作测试。于是得到的是 404。发现 .htaccess 是可以用的，每次更新设置都会改变时间戳。然后再看文档，发现需要对虚拟主机作下面的配置才可以正常使用：
+
+<pre><directory />
+    AllowOverride All
+</directory></pre>
+
+其实说起来很简单，你不允许服务器挂载外部的 .htaccess 文件，当然不会起作用。问题就出在我以前都不习惯用 .htaccess 来定义 apache 配置，所以对于 <code>AllowOverride</code> 的理解不那么深刻。

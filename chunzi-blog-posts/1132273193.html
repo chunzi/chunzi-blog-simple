@@ -1,0 +1,28 @@
+cpan-upload
+
+一早起来有意无意浏览 Catalyst 的代码仓库的时候，发现了一个叫做 <a href="http://dev.catalyst.perl.org/file/trunk/release.pl">release.pl</a> 的工具脚本。正如其名，每次项目进展到一个里程碑，开发人员即可用此发布 -- 从 svn 工作目录中提交更新，制作发布打包文件，上传到 CPAN ，然后到 svn 仓库中对当前发布打上标签（tag）。
+
+有意思的是，cpan-upload。以前如果我要发布东西到 CPAN 上，必然登陆 pause.perl.org 然后 login，然后 upload 。这下可好，这个 release.pl 用了一个叫做 cpan-upload 的脚本来做这件事情，方便不少。到 search.cpan.org 一找，<a href="http://search.cpan.org/~neilb/cpan-upload/">在这里</a>，不过不是模块，不能通过 Perl -MCPAN -e "install ..." 的方式来自动安装（至少目前我得出这样的结论）。所以<a href="http://search.cpan.org/CPAN/authors/id/N/NE/NEILB/scripts/cpan-upload-2.2.tar.gz">下载</a>下来，按照标准方式（perl Makefile.PL &amp;&amp; make &amp;&amp; make install）安装。前置需要 AppConfig::Std 和 Term::ReadKey 模块。cpan-upload 会被复制到 /usr/local/bin/ 下面，所以以后都可以直接用 cpan-upload 来调用。
+
+如果直接用命令行给出很多参数来上传的话，依然不是足够方便。所以你需要在自己的用户主目录下面创建一个 .pause 的配置文件。比如：
+
+<pre>  # example .pause for user neilb
+    # the user is your registered PAUSE username
+    user NEILB
+    password thisisnotmyrealpassword
+
+    mailto      = neil@bowers.com
+    ftp_gateway = ftp-gw
+    http_proxy  = http://proxy.cre.canon.co.uk/
+
+    non_interactive</pre>
+
+如果在其中设定了密码，那么除非该文件的权限为仅仅属主可读，否则 cpan-upload 拒绝继续服务：
+
+<pre>cpan-upload: your config file /root/.pause is readable by others!</pre>
+
+so just:
+
+<pre>chmod 600 ~/.pause</pre>
+
+当然如果不设定密码也是可以的，cpan-upload 会提示你输入。其他的都比较简单。解放劳动力的好东西，分享。

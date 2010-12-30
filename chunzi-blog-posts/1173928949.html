@@ -1,0 +1,9 @@
+设置 gnome-terminal 标题
+
+虽然有 screen 可以用，不过在本地机器上还是喜欢开终端窗口。为了区别，我使用 Menu 键快捷设置标题。但是每次都去手工做这些事情，未免繁琐。我希望每个终端在做特定的事情的时候，自动给自己设置一个标题。参考<a href="http://archive.lug.boulder.co.us/Week-of-Mon-20050627/030139.html">这篇邮件</a>之后，大致归纳如下：
+
+在 bash 下面：
+<pre>export PROMPT_COMMAND='echo -ne "\\033]2;Chunzi\\007"'</pre>
+在 sh 下面：
+<pre>echo "\\033]2;Chunzi\\007"</pre>
+坦白说，我不知其所以然，管用就好。看上去回显一段带有控制符的文本就行。也不会影响当前的 shell 提示符。什么时候了解了内中机理再说。

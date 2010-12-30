@@ -1,0 +1,7 @@
+WordPress Plugin: Preserve Code Formatting
+
+以前我的 blog 里面很少出现 code 片段，那是因为 WordPress 默认情况下支持不好，而且我很懒，所以宁可什么也不做。
+
+刚才安装了来自 <a href="http://www.coffee2code.com/archives/2005/03/29/plugin-preserve-code-formatting/">coffee2code.com</a> 的插件，貌似不错。我不喜欢在文章中语法高亮，以及什么行号，干净最好。
+
+单此可用了，不过默认的编辑器上面的按钮只有 Code 没有 Pre 也没有 PreCode。于是编辑  /wp-includes/js/quicktags.js ，找到定义 code 按钮的那一行，照样画葫芦加了两个。回来再修订下 css ，这下满意了。

@@ -1,0 +1,64 @@
+Ubuntu 字体优化
+
+之前优化过 Ubuntu 字体之后，在阅繁体中文的邮件时依然使用了原先默认的字体，所以连带上次的设置过程和这次的繁体字体设置一并归纳如下，以后再要装系统就不用到处找了。
+
+首先下载字体文件，简体中文用 STHeiti.ttf 繁体中文用 LiHeiPro.otf 英文用 Lucida Grande 。中文都是 Mac 里面的黑体字。出于版权的关系，这里不提供下载连接。
+
+由于 LiHeiPro.otf 是 Open Ture Type 的字体，不是 TTF ，所以系统不能直接使用，我们需要转换一下。保存下面的内容到 otf2ttf.sh 文件中：
+<pre>#!/usr/bin/fontforge
+# Quick and dirty hack: converts a font to truetype (.ttf)
+Print("Opening "+$1);
+Open($1);
+Print("Saving "+$1:r+".ttf");
+Generate($1:r+".ttf");
+Quit(0);</pre>
+当然你需要保证 fontforge 已经安装，并且上述脚本第一行的路径和实际的相同，并为该脚本增加可执行的属性：
+<pre>sudo apt-get install fontforge
+chmod +x otf2ttf.sh</pre>
+然后运行该脚本转换字体，以下是在我系统上的输出，虽然有两句貌似警告的话，不过不影响使用：
+<pre>$ otf2ttf.sh LiHeiPro.otf
+Copyright (c) 2000-2006 by George Williams.
+ Executable based on sources from 15:48 3-Jul-2006.
+Opening LiHeiPro.otf
+Unknown GSUB sub-table type: 0
+Unknown GSUB sub-table type: 0
+Saving LiHeiPro.ttf</pre>
+恭喜，你已经得到了 LiHeiPro.ttf 文件。
+
+第二步，复制这些 ttf 字体文件到 <code>/usr/share/fonts/truetype</code> 目录中。当然也可以放到用户主目录的 <code>~/.fonts</code> 目录中，只要 fc-cache 找得到。
+
+第三步，刷新字体数据的缓存：
+<pre>sudo fc-cache -f -v</pre>
+这时候，应该可以在<strong>菜单－首选项－字体</strong>中可以可以看到有这三种字体。
+
+第四步，配置字体的使用。编辑 <code>/etc/fonts/language-selector.conf</code> 文件，分别找到下面两行：
+<pre><family>Bitstream Vera Serif</family>
+...
+<family>Bitstream Vera Sans</family></pre>
+各在下面添加：
+<pre><family>STHeiti</family>
+<family>LiHeiPro</family></pre>
+这使得系统采取一定的次序选择要渲染的字体。英文简体繁体混杂的时候，就可以分别用 Lucida Granda 和 STHeiti 和 LiHeiPro 来渲染，以达到最佳效果。
+
+第五步，调整中文渲染效果。<strong>菜单－首选项－字体－细节</strong>中如果使用微调，中文字因为笔画多，容易模糊，但如果关掉微调，英文字又会很难看，所以我们需要全局打开微调，然后针对中文字体关掉微调，使用 <code>hinting</code> 配置参数。打开 <code>/etc/fonts/fonts.conf</code> 文件，找到类似结构的地方添加：
+<code><match target="font">
+<test name="family">
+<string>STHeiti</string>
+</test>
+<edit name="hinting">
+<bool>false</bool>
+</edit>
+</match>
+<match target="font">
+<test name="family">
+<string>LiHeiPro</string>
+</test>
+<edit name="hinting">
+<bool>false</bool>
+</edit>
+</match></code>
+重新启动 X 。可以用快捷键：<em>Ctrl+Alt+Backspace</em>。
+
+第六步，设置<strong>菜单－首选项－字体</strong>。除了最后的等宽字体不用变之外，其他的都可以选择 Lucida Grande 字体。然后尝试调整细节，取得自己最满意的效果。
+
+大功告成！

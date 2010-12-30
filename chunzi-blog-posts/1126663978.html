@@ -1,0 +1,17 @@
+Backbase.com
+
+这是一个了不起的公司，Backbase.com，看看它的宣传图片：
+
+<img src="http://www.backbase.com/home/company/jobs/images/history.png">
+
+最后一个在跑动，一点都不为过。写完之前的一篇，再仔细读阅 backbase 的 Backbase_Community_Edition_3.0.1 中的内容，突然发现这就是我要的东西。Backbase 将 Ajax 等常用的 js 代码封装为 bpc.js ，然后还做好了很多 GUI 组件，诸如 tabbox, menu 等等。而你所要做的就是按照 BXML 的语法写一些完全兼容 XHTML 的代码，这些 BXML 标签加上一些属性，结合 js 和 css 定义，便呈现出动态丰富的 GUI 组件。其中还运用了 XPath，XLST 等技术，兼容大多的浏览器，做的非常专业，一般用得到的那些 widget 基本上都有了，从 communitity edition 的包里面就有 starterkits 等演示，不仅是 cool 而且还展示了将来的（现在？）web 应用系统的趋势。
+
+说起 web 上的 GUI 组件，两年前尝试编写自助建站系统的时候，硬是用 html + js + 简单 css 写了几个小的 TT2 的模版文件，然后通过 TT2 的 wrapper 来拉进来，并给出参数，效果是出来了，维护成本和兼容性的问题就出来了，而且最终出来的页面也很大。当时作了 tabbox, tabmenu 等等, checkbox 也都换成了图片的形式，做的和 Mac 上一样，当时也算是非常得意地，因为也只需套用数据就可以，GUI 的逻辑由这个小的 tpl 完成。后来这个项目不了了之。
+
+其后，更多地关注 XHTML + CSS 的 web 标准。从 A List Apart 上看了几篇文章，发现只需要 CSS 加上 JS 就可以做到很 cool 的效果，而且，数据表示也很简单清爽。喜欢 alistapart 是因为上面的文章作者很有创意，充分发掘和利用了现有的技术和特性，比如做 Tabbox, 就是两张对角图片，只要一张足够大，出来的效果就是平滑而美丽的，xhtml 代码却很简洁，只要定义 class 就可以。另外，比如 ul/li 这样的 list 也可以换成 tabbed menu 或者级联的菜单。当不同状态，某个地方背景变化，以前的做法是调用不同的图片，新的创意则是一张图片，不同状态使用 css 定位到不同位置，带来什么好处呢，不会有等待载入的延迟。虽然很简单，不过确是革新的进步。
+
+而现在细看了 backbase 则把这些充分运用，很多地方的思路和上面的并无二致，只是他们把这些都封装的让你可以更容易的使用。常用的一些 GUI 组件都给你做好了，你只要大致看一下例子便可以拿来就用，而无非是写一些 class , attribute 或者换几张图片而已。backbase 还充分运用了 XML 和 XPath, XLST 等技术。这群人的底蕴一定都非常深厚了，想想自己相比之下，小巫都没资格。
+
+backbase.com 的站点里面还有些业界或者学术的讨论研究文章，花点时间阅读非常有裨益。还有些介绍 backbase 的<a href="http://www.backbase.com/#home/products/faq/architecture.xml[33]">技术结构框架</a>。
+
+接下来还要花些时间好好消化研究。

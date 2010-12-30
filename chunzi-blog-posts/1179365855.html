@@ -1,0 +1,7 @@
+Catalyst 在 modperl2 里的怪问题: Can&#8217;t store CODE items
+
+本来在 Catalyst 的原生 web 服务下跑得很好的，在 Ubuntu 上装了 apache2 和 modperl2 之后，虽然能起来，但刚登录就出错，看日志发现：
+<pre>[error] Caught exception in engine "Can't store CODE items at ../../lib/Storable.pm (autosplit into ../../lib/auto/Storable/_freeze.al) line 290, at /usr/local/share/perl/5.8.8/Object/Signature.pm line 19"</pre>
+查了下 Google 未果。今早一问 <a href="http://fayland.org">Fayland</a>，一语中的：
+<pre>cpan install Tie::RefHash</pre>
+升级一下搞定。很困惑为什么 Catalyst::Engine::Apache 的文档中不提一下呢，搞得我昨天很郁闷，一直到睡觉前。

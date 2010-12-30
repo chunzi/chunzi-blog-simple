@@ -1,0 +1,9 @@
+Net::DRI
+
+之前为公司写一个代理平台，其中关于域名注册相关的业务，需要和不同的上级代理商，诸如新网，中国频道等进行通信。不同的上级代理商提供的接口不尽相同，而我希望有一个统一的界面来对相关的业务来操作，所以写了一个代理接口，以便封装不同上级代理的实现细节。
+
+今天在 CPAN 上发现了 <a href="http://search.cpan.org/~pmevzek/Net-DRI-0.18/lib/Net/DRI.pm">NET::DRI</a> 模块做类似的工作。而且比我封装得更完善。DRI 的意思就是 Domain Registries/Registrars/Resellers Interface 。
+
+该模块中的 Net::DRI::DRD ，也就是 Domain Registry Drivers 用来驱动不同的域名注册商（<a href="http://www.dotandco.com/services/software/Net-DRI/index.en.xhtml">参考</a>）。目前大约有 6 个国外比较大的几个（ICANN，VNDS，WS，AFNIC，Gandi，EURid）。
+
+大约看了下，要把我这里的代理商嵌进去，还是要花一番功夫的。所以暂不考虑移植。不过作为学习和参考，这个模块还是构架得不错的。

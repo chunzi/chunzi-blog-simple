@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+use DBI;
+use Class::Date qw(date);
+use File::Slurp;
+use Path::Class;
+
+my $post_dir = dir 'post';
+-d $post_dir or $post_dir->mkpath( 0, 0777 );
+
+my $dbh = DBI->connect('dbi:mysql:blog','root', '' ) or die $DBI::errstr;
+my $sth = $dbh->prepare("select * from wp_posts order by id desc");
+$sth->execute();
+while ( my $post = $sth->fetchrow_hashref ){
+	my $date = date $post->{'post_date'};
+	my $content = $post->{'post_content'}; $content =~ s/\r//g;
+	my $title = $post->{'post_title'};
+	
+	my $filename = sprintf "%s.html", $date->epoch;
+	my $filecontent = sprintf "%s\n\n%s", $title, $content;
+	
+
+	
+	my $filepath = $post_dir->file( $filename )->stringify;
+
+	printf "%s\n", $filepath;
+	
+	write_file( $filepath, $filecontent );
+}
+
+

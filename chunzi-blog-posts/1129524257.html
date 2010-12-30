@@ -1,0 +1,39 @@
+Catalyst 5.50 RC1
+
+大约一个礼拜之前， Catalyst 5.5 的第一个预览版本就发布了。参考邮件列表上的<a href="http://lists.rawmode.org/pipermail/catalyst/2005-October/001880.html">这个页面</a>。
+
+大体上，新版本对内核作了一定程度的改进，所以除了使用 prepare_body 和 finalize_body 两个方法的 Plugin 模块之外，对我们没有什么影响。
+
+不过，新的版本提供了更多的特性，修复了一些 Bug ：
+
+* 直接通过 url 路径来传递参数
+
+原来的写法：
+<pre>$c-&gt;forward( '/foo/bar', [ qw/arg1 arg2/ ] );</pre>
+
+现在可以这样写：
+
+<pre>$c-&gt;forward( '/foo/bar/arg1/arg2' );</pre>
+
+* 将 $c-&gt;req-&gt;uri 和 $c-&gt;req-&gt;base 都转为 URI 对象来表达。
+* 同名的表单参数在 debug 页面中正常显示。
+* 查询字串中可以使用半角逗号作为参数字段分隔符。
+* 在使用 Proxy 作为前段，转发请求到 HTTP 起来的 Catalyst 时，可以正确解析出 proxy 之前的真实 req-&gt;base 和 req-&gt;address 信息。
+* 对于 log 的输出，可以 abort 了。便于像 Static::Simple 这样的 Plugin 规避冗余。
+* 增加了 $c-&gt;uri_for 方法以简化 URI 的处理。看个例子：
+
+假设你的应用运行在 http://localhost/base 下面：
+<pre># 绝对路径
+$c-&gt;req-&gt;uri_for( '/foo/bar' ); # http://localhost/base/foo/bar
+# 相对路径（假设当前页面为 http://localhost/base/page ）
+$c-&gt;req-&gt;uri_for( 'subpage'  ); # http://localhost/base/page/subpage
+# 使用数点
+$c-&gt;req-&gt;uri_for( '../page2' ); # http://localhost/base/page2</pre>
+
+* 重构了核心引擎。现在所有 Engine 都是基于 CGI 实现的。Apache 引擎则独立出来，自成一体。
+* 增加了复制进程的功能，也就是 fork 。之前我在公司的项目中，就因为要做 domain query 而使得后面的请求阻塞。正在考虑是否将这部分独立出来，或者让 HTTP 可以 fork 出来（就像 Apache 一样），这下可好，不用自己操刀了。新版只需要 app_server.pl -f 即可运行在 fork 模式。默认不使用该模式。这个功能同样利于自动测试。
+* 修复了所有的内存溢出问题。
+* 线程安全了。不过如果你用在 Apache 2 的 mpm_worker 下面运行，同样需要确保所使用的其他模块的线程安全问题。
+* 增加了对流数据的读写。$c-&gt;req-&gt;read() 和 $c-&gt;res-&gt;write() 。籍此，可以用 Catalyst 来做 mp3 播放服务器了。（podcast?）
+
+确实有点激动人心。

@@ -1,0 +1,20 @@
+Ajax
+
+同步 CPAN 的时候，再次发现了名为 <a href="http://search.cpan.org/~sri/Catalyst-Plugin-Ajax-0.02/Ajax.pm">Catalyst::Plugin::Ajax</a> 的模块，究竟 Ajax 是一个怎样的模块呢？
+
+察看 pod 文档，略有了解，在 html 模版中引用模块中 __DATA__ 数据区的一段 javascript ，然后在模版中可以通过 javascript 请求其他 URL 并将返回的内容应用到当前的页面中。简单的说，你不再需要刷新整个页面了。
+
+以前做客户的订单系统的时候，客户说，能不能在我输入前几个字母后，把对应的那些列表显示出来，然后直接选择就可以了？我说不行，因为数据量很大，每一次 key 变化都要请求服务器查询，不太现实。当然我知道这是可以做到的，只不过意义不是很大，而且要结合 iframe 和 javascript 一起实现。
+
+以前在 Gmail 中也看到过，输入用户邮件地址的时候，如果以前曾经输过，则自动跳出来，省却再次输入的麻烦。当时没有细究，我猜想应该也是使用类似的 iframe 技术。
+
+Catalyst 确实很有趣，它的例子中的 Ajax 应用，就是让你在编辑文本区域（特别像 blog 那样的系统）时，一旦发生 keyup 事件，即可提交修改内容，并把响应返回的文本重新复制到编辑区域，这样，就不会因为客户端的程序意外终止而丢失正在编辑的内容。而在我的系统上，一旦在中文状态输入下划线（就会变为破折号），就会程序错误，意外终止。我吃过很多这样的亏了。
+
+为什么叫做 Ajax ？还是来请教 Google 吧。
+
+Ajax 即是「Asynchronous JavaScript + XML」，说的在具体点，就是应用 JavaScript 中的 XMLHttpRequest 对象。结合 DOM 来控制页面上的元素的内容和行为。
+
+看来在以后自己的应用中，该要着手用这个技术了。比如说：邮件地址 auto complete；信件内容自动定期保存；表单数据校验；等等。
+
+更为具体的介绍，可以看看这里：
+http://www.adaptivepath.com/publications/essays/archives/000385.php

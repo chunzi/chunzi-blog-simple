@@ -1,0 +1,11 @@
+
+<div id="posts">
+[% FOREACH pb = posts_bydate %]
+	<div class="month-header">[% pb.year %]年[% pb.month %]月</div>
+	<ul>
+		[% FOREACH post = pb.posts %]
+		<li><a href="[% c.uri_for("/post/$post.uid") %]">[% post.title || '无主题' %]</a></li>
+		[% END %]
+	</ul>
+[% END %]	
+</div>

@@ -1,0 +1,28 @@
+美女大图屏保
+
+
+<ul>
+	<li>几周前无意发现 Flickr 上有个 <a href="http://www.flickr.com/groups/asiandreams/pool/">group</a> 都是美女图，色彩艳丽清晰，肾上腺素大量分泌，无限愉悦。隧收藏到 Google Reader ，可惜 RSS 过来的图小的可怜。</li>
+	<li>几周前发现 piclens.com 上的 Firefox 插件，访问 Flickr 的时候可以全屏 3D 动态加载相关的图片供欣赏。之可惜目前只支持 Windows 和 Mac OSX。</li>
+	<li>很喜欢 OSX 上的屏保，大图在那里 Zoom in/out，然后 fade in/ou，非常唯美。Ubuntu 上可以用 F-Spot ，效果差不多。</li>
+	<li>于是想通过 Flickr 的 API 取图片，然后让 F-Spot 展示。</li>
+	<li>先用 python 的一个 flickr.py 的模块，感觉很慢，而且我指定 100 个 Original 大小的他只给我 48 个图片的 url。</li>
+	<li>怀疑 API 接口中的 page 可能和网站上的不一致，还怀疑这个 python 接口有问题，搞了很久。</li>
+	<li>终于忍不住试了下 Perl 的 Flickr::API 模块，相当简单，也很快。</li>
+	<li>这才有机会搞明白并不是所有的图片都有 Original 这个 size 的。错怪 flickr.py 了。</li>
+	<li>先通过 flickr.groups.pools.getPhotos 取图片对象。因为 url 中有一部分是会随时间变化的 secret字段，所以不能由这里得到的图片对象直接构造 url。所以需要再用 flickr.photos.getSizes取所有该图片的不同大小的版本的信息，包括 url。由此 flickr.py 才显得慢，不过即便这样，感觉上还是 perl 的接口版本快很多。</li>
+	<li>先把输出的 url 存到列表文件中。然后另外用 wget 去抓。</li>
+	<li>为了每次抓新的图片，避免重复，又不想用 sqlite 这样的数据库保存状态，于是用了个小 trick。把新取来的 url 和已抓的 url 列表并起来，sort 一下再 uniq -c 一下，只用 awk 打印重复 2 次的 url保存到 url.exclude 文件中，然后类似的，将这个列表和新抓的 url 列表并起来取计数为 1 次的那些，就是没有下载过的新图片了。两行 shell cmd 就可以极速搞定。</li>
+	<li>把这两行命令还有下载什么的写在一个 run.sh 里面，扔到 crontab 里面每个小时抓一次新图片，工作地挺好。</li>
+	<li>跑了一晚上，初始抓了 4G 的数据。用 F-Spot 导入，没多久就 out of memory，看来 F-spot 不可靠。</li>
+	<li>记得 screensaver 里面有个差不多的，查了下，GLSlideshow。</li>
+	<li>参考<a href="http://rclermont.blogspot.com/2007/02/modifying-glslideshow-settings-in_28.html">这篇</a>设置如下：把下面内容保存到 <code>~/.xscreensaver</code> 文件中：
+<pre>imageDirectory: /home/username/Photos
+chooseRandomImages: True</pre>
+修改 <code>/usr/share/applications/screensavers/glslideshow.desktop</code> 文件中的这行：
+<pre><code class="javascript">Exec=glslideshow -root</code></pre>
+为：
+<pre>Exec=glslideshow -root -duration 6 -pan 6 -fade 2</pre>
+其他参数可以看<a href="http://linux.die.net/man/1/glslideshow">这里的 man</a>。</li>
+	<li>然后就很爽了。等有钱了买 30 寸显示器。</li>
+</ul>

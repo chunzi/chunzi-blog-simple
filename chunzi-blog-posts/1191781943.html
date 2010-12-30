@@ -1,0 +1,16 @@
+Perforce 点滴
+
+我恨 Perforce。虽然它更快更强大，不过着实是为机器考虑，人用起来不直观，也麻烦。
+
+如果要添加一个目录，Subversion 只需要：
+<pre>svn add directory_name
+svn ci -m 'adding ...'</pre>
+Perforce 根本不对目录进行版本管理，所以没有类似的添加命令。Perforce 永远只对文件进行版本跟踪。添加一个文件之后，那么这个文件的路径决定了所在的那些目录也同时被“添加”到仓库中。由此引来一个问题，删除文件后留下的空目录就要手工删掉。虽然这些空目录不影响仓库，不过这样多少体现了仓库和工作目录的不一致性，比较容易让人 confusing。所以 Perforce 里面添加目录就只有一种方法，依次添加所有其中的文件。这是一件苦差事，所幸还有条捷径：
+<pre>cd directory_need_add
+find . -type f -print | p4 -x - add
+p4 submit</pre>
+类似的删除目录的操作也是如是，把 add 换成 delete。
+
+此外最讨厌的是不知道本地修改了什么文件（如果事先没有 p4 edit file 作声明的话），以及哪些文件还没有纳入版本控制。Subversion 简单，只需要 svn status 就可以从首字母看到状态。Perforce 没有从人的角度考虑这些问题，所以只能多走几步：
+<pre>find . ! -type d | xargs p4 have 2&gt;&amp;1 &gt; /dev/null</pre>
+麻烦呀麻烦。

@@ -1,0 +1,18 @@
+Catalyst::Plugin::StashSetter
+
+又冒出来一个 Plugin ，比较简单，目标是一次对多个传入 stash 的参数使用键值对的形式赋值。
+
+原来这样写，比较罗索，
+
+<pre>$c-&gt;stash-&gt;{param1} = 'value1';
+$c-&gt;stash-&gt;{param2} = 'value2';
+$c-&gt;stash-&gt;{param3} = 'value3';</pre>
+
+现在可以简单点：
+
+<pre>$c-&gt;set_stash( param =&gt; 'value' );
+$c-&gt;set_stash(
+    param1 =&gt; 'value1',
+    param2 =&gt; 'value2',
+    param3 =&gt; 'value3',
+);</pre>

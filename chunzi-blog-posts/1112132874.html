@@ -1,0 +1,13 @@
+MojoMojo
+
+Yet another wiki. Based on Catalyst.
+
+想要着手用 Catalyst 构建 PerlChina 站点的。当然先要看 Catalyst 的文档。然后是邮件列表。于是发现其中提到的 MojoMojo 。下载 svn 的客户端，check out mojomojo 到本地，开始配置安装。过程也算是繁琐的。在 #Catalyst 里面请教作者，协助排错，最后终于搞定，能跑起来。其中自己修改了若干部门的代码：改用 ApacheSession 而非 Cache::FastMmap（因为 win32 不支持）；修改配置环境等等；修改 Time::Piece 相关的 bug 。
+
+这是一个基于 Catalyst 的范例应用，和我要做的 PerlChina 也有所类似（修订版本，不同格式）。所以它是学习和借鉴的好东西。
+
+从聊天中了解到，Simon Cozens 又在搞些东西，也是 Wiki 吧，叫做 Mitiki。http://blog.simon-cozens.org/20050329-2.html
+
+另外，之前看到的 Ajax 也在这个 MojoMojo 中应用。而且，Rails 也在使用这项技术：http://conio.net/ 和 http://dev.rubyonrails.com/file/trunk/actionpack/lib/action_view/helpers/javascripts/prototype.js
+
+彻夜未睡。

@@ -1,0 +1,176 @@
+解析 instiki 学习 Ruby
+
+很久以前写的，没地方保存，不如扔到这里来，至少不枉费那么多字的组合。或许那天真的开始学 Ruby 的时候还能找到点熟悉的东西，呵呵。
+<h1 id="pageName"><small>Ruby 学习</small>
+解析 instiki 学习 Ruby</h1>
+<strong>缘由</strong>
+我是一个习惯用 Perl 写程序的人，最近的工作大多是基于 web 的应用。为了提高自己的效率，我构建了一个自己的应用框架。当时借鉴了 OpenInteract。后来又看到了 Maypole，一个极富技巧性的 web 应用框架。它起初的版本还不够完善，并没有实现严格意义上的 <span class="caps">MVC </span>结构，在 Maypole 开发项目的 <span class="caps">IRC </span>上我看到有人提到了 RubyOnRails 这个 Ruby 上的 <span class="caps">MVC </span>框架。当时我粗看了一下，代码非常简洁。你知道我是个很懒的人，所以越是简单的东西对我的吸引力也越大。当初学习 Perl 也是因为它的简单。于是我第一次萌生学习 Ruby 的念头。
+
+而最近配置 <a href="http://wiki.perlchina.org">wiki.perlchina.org</a> 的时候又机缘巧合的使用了 instiki ，这是个基于 RubyOnRails 的 wiki 程序。instiki 用起来非常爽，只要你的系统装好 ruby-1.8.1 以上版本，然后直接运行 ruby instiki.rb 就可以启动了。它不需要你安装数据库或者 web 服务器。
+
+instiki 默认有三种标签语言，不过我想要一个 PerlPod 的标签库。开始的时候我想自己 hack 已有的代码，希望可以变通过来。与此同时，发送 Feature Request 到官方站点，结果开发人员非常爽快地说“自己写吧，接口非常简单的！”。哈，是很简单的，可是我不懂 Ruby 只晓得 Perl 怎么办？
+
+不懂就学喽，况且看上去那套 <span class="caps">MVC </span>似乎不错，要是自己用它也构建出可以直接运行的应用，那该多 cool 啊！至少不需要在客户的机器上配置那么多一整套的东西了。
+
+<strong>准备工作</strong>
+ok ，我们只需要三样东西，第一，Ruby 语言解释器，最新的版本在这里：
+<ul>
+	<li>unix 版本：<a href="ftp://ftp.ruby-lang.org/pub/ruby/ruby-1.8.2.tar.gz">ftp://ftp.ruby-lang.org/pub/ruby/ruby-1.8.2.tar.gz</a></li>
+	<li>windows 版本：<a href="http://rubyforge.org/frs/download.php/2407/ruby182-14.exe">http://rubyforge.org/frs/download.php/2407/ruby182-14.exe</a></li>
+</ul>
+第二，instiki 程序，当前最新版本为 0.9.2 。
+<ul>
+	<li>下载地址为：<a href="http://rubyforge.org/frs/?group_id=186">http://rubyforge.org/frs/?group_id=186</a></li>
+	<li>官方站点地址为：<a href="http://www.instiki.org/">http://www.instiki.org/</a></li>
+</ul>
+第三，一杯热茶。天冷了，需要暖暖手。
+
+<strong>先让 instiki 跑起来</strong>
+第一步，安装 Ruby 。在 Unix 上：
+<pre><code>tar zxvf ruby-1.8.2.tar.gz cd ruby-1.8.2 ./configure ./make ./make install</code></pre>
+如果在 Windows 机器上，我上面给出的下载连接是单个 exe 文件，可以直接安装的，我就不罗嗦了。
+
+第二步，解压缩 instiki 到运行目录。比如打算在 /www/wiki 下面运行的，那就
+<pre><code>cd /www tar zxvf instiki-0.9.2.tgz mv instiki-0.9.2 wiki cd wiki</code></pre>
+第三步，运行 instiki，就像文章开头说的：
+<pre><code>ruby instiki.rb</code></pre>
+然后屏幕上大约会显示：
+<pre><code>[2005-01-18 23:47:01] INFO  WEBrick 1.3.1 [2005-01-18 23:47:01] INFO  ruby 1.8.2 (2004-12-25) [i386-mswin32] [2005-01-18 23:47:01] INFO  Your WEBrick server is now running on  http://localhost:2500 [2005-01-18 23:47:01] INFO  WEBrick::HTTPServer#start: pid=3148 port=2500</code></pre>
+这说明服务都起来了。默认情况下，instiki 在 2500 端口上提供 http 服务，所以如果你在本地机器上安装运行的话，打开浏览器，输入：
+<pre><code>http://localhost:2500/</code></pre>
+好了，你应该看到它的界面了。当然我们也可以改用 80 端口，只要在启动的时候给出相关参数即可：
+<pre><code>ruby instiki.rb --port=80</code></pre>
+通常你的服务器已经在 80 端口提供其他的站点服务了，怎么办呢？Apache 的 mod_proxy 或者 mod_rewrite 都可以解决这个问题。这里不啰嗦了，下文为了简单，都改用 80 端口的访问地址。
+
+第一次运行看到的界面，提示你输入 wiki 站点的名称（我输入的是 <a href="http://wiki.chunzi.org">wiki.chunzi.org</a>），站点的名称会在以后的页面中显示。然后是这个站点的 uri 名字空间，一般取用简短的即可（比如 main），这样以后这个站点内的所有资源的 <span class="caps">URL </span>都是以“http://localhost/main/”开头的。以后你还可以设定其他的 wiki 站点，比如“ruby”，那么新的 wiki 站点的所有 <span class="caps">URL </span>都以“http://localhost/ruby/”开头。
+
+接下来设定 wiki 的管理密码。以后每次管理变更 wiki 站点配置信息，提交的时候都需要输入这个密码。提交后转到 HomePage 的编辑页面。HomePage 称为 WikiWord 。在 wiki 的世界里，每个页面都有一个唯一的 id ，这个 id 就是 WikiWord 。那么要访问某个 wiki 页面，URL 中只要包含指定的 WikiWord 即可。所以如果显示首页，也就是 WikiWord 为 HomePage 的页面，它的 <span class="caps">URL </span>看起来就像是 “http://localhost/main/show/HomePage”。很简单，main 是我们设定的 uri 前缀，show 是告诉 wiki 要执行的动作，HomePage 就是要显示的页面了。
+
+接着说，在编辑 HomePage 的文本输入框内随便写点东西，然后在最下面填上自己的名字“chunzi”，再点“Create”，这时候你会看到首页面，内容就是刚才编辑的。如果不满意，点页面左下方的 Edit 连接，再回到刚才的编辑页面。更新的话，点“Update”按钮，取消点右下方的 “Cancel”连接。
+
+上面罗嗦了很多。基本上是 instiki wiki 的简单使用方法。其他的不啰嗦了，自己看看就明白的。我们关心的是 instiki 是如何用 Ruby 实现的，然后通过它的源代码来解析和学习。
+
+<strong>看看幕后的文件组织结构</strong>
+回到刚才的目录，我们看到 instiki 应用下面有一个主程序文件：instiki.rb ，一个说明文件 <span class="caps">README </span>，另外还有三个目录：
+<ul>
+	<li>app</li>
+	<li>libraries</li>
+	<li>storage</li>
+</ul>
+从字面意思来看，很简单，app 放的应该是 wiki 应用程序文件，libraries 放的是 ruby 的库文件，storage 就该是数据存储的地方了。
+
+先看 storage ，它里面还有个目录，名称为 2500 ，和端口的名称一样？没错，什么端口上起来的，数据就保存在什么端口的名称的目录里面。在里面就是一个文件名很长的文件了，先不管它是什么格式的，怎么记录保存数据的。回头再看。
+
+接下来看看 libraries 目录，hoho，里面很多 .rb 的文件，还有个 zip 文件夹和 diff 文件夹。我们知道，instiki 可以比对每次的页面更新情况，并能通过背景色和符号提示每次更新的变化之处。这个功能我们很熟悉，就是 diff ，比较内容差异用的。这里的 diff 目录也就是存放 diff 算法的通用模块的吧。这个和 Perl 里面差不多，不过 Perl 的模块都是 .pm 结尾的，而我们在这里看到的是 .rb 结尾的。那么 zip 目录就该是 zip 压缩算法的模块了。我们还看到了 web_controller_server.rb 文件，打开看看，第一二行为：
+<pre><code>require 'webrick' include WEBrick</code></pre>
+是不是有点眼熟？WEBrick 好像在哪儿见过？不错，启动 instiki 的时候，我们看到过的：
+<pre><code>[2005-01-18 23:47:01] INFO  WEBrick 1.3.1 [2005-01-18 23:47:01] INFO  WEBrick::HTTPServer#start: pid=3148 </code></pre>
+instiki 没有要求你用 Apache 服务器，就是因为这里用了称之为 “WEBrick”的 web 服务器模块。而且还是带 controller 的，什么是 controller ？MVC 框架中的 C 就是这里的 Controller。呵呵。有点意思。
+
+现在不再深入模块部分了，我们广度优先，且慢深度优先。再看 app 目录，yeah，看到什么了？三个目录，非常整齐划一：
+<ul>
+	<li>controllers</li>
+	<li>models</li>
+	<li>views</li>
+</ul>
+这不就是 <span class="caps">MVC </span>三大块东西么。controllers 里面只有一个 wiki.rb 文件。models 里面多了，什么 page.rb（管页面的）；什么 revision.rb（管版本修订的）；什么 wiki_words.rb（管理 Wiki Word 的）。views 里面也好多文件，不过不是 .rb 的了，改为 .rhtml ，模版文件？打开一个 top.rhtml 看看，哈，没错，就是模版文件，程序代码都用
+<pre><code><!--..--></code></pre>
+括起来的。
+
+基本上 instiki 的文件组织结构就是如此了，它有存储数据的地方，它有通用的模块可以调用，它有符合 <span class="caps">MVC </span>的三块东西组成：wiki 站点的控制器，若干业务处理模块，以及一堆模版文件。
+
+<strong>顺藤摸瓜</strong>
+instiki 非常简单，只需要运行 instiki.rb 文件就可以了，所以如果要分析它是如何运作的，就必须先来看看 instiki.rb 文件。好的，打开它，总共才 67 行，非常简短。先来看第一行，
+<pre><code>#!/usr/local/bin/ruby</code></pre>
+Unix 下面每一种 shell 下面运行的解释语言一般都要在第一行
+写上这么一句，用来告诉 shell 用什么解释器来解释运行本文件的代码。Perl 也是如此，简单。
+
+接着看：
+<pre><code>if RUBY_VERSION < "1.8.1"    puts "Instiki requires Ruby 1.8.1+"    exit end</code></pre>
+就着字面意思一读，很明白了，如果 Ruby 的版本小于 1.8.1 那么输出一句提示，然后退出。这里我们看到这样一些东西：
+<ul>
+	<li>if 语句块。和 Perl 不同，Ruby 不用小括号，也不用大括号，结束的地方用保留字 end 说明。</li>
+	<li>表达式。RUBY_VERSION 应该是 Ruby 中的变量了，不过它没有 $ 开头，而且之前也没有申明过，说明应该是默认的变量，它和后面的 “1.8.1” 这个字符串比较大小，说明这个默认变量如其名，保存着当前 Ruby 解释器的版本号。</li>
+	<li>puts 方法。这个和 C++ 中的一样，该是往 <span class="caps">STDOUT </span>输出数据用的，这里输出的是后面双引号圈起来的部分。</li>
+	<li>exit 方法。我想这个和 Perl 一样的，直接退出程序运行了。</li>
+	<li>字符串。不用多说，上面的一看就知道。</li>
+	<li>语句的结束不需要分号。这是优点还是缺点呢？缺点是语句分割不明确，优点是显而易见的：懒人不用多敲一个键了。</li>
+</ul>
+目前好像我们能知道的就这么多，最多加上字符串的数字的比较。这个什么语言都一样的。
+
+继续看下面的代码：
+<pre><code>require 'optparse' require 'fileutils'</code></pre>
+Perl 里面也有 require ，用来包含外部的一个 perl 代码文件的；Perl 里面还有一个 use ，它和 require 不同，它是在运行前先载入一个模块文件，并作语法检查和编译操作，然后尝试运行其中的 import() 方法。这里 Ruby 的 require 到底对应到哪一种我们还不清楚，不过至少它是要表明载入一个外部文件用的。第一个被载入的是称为 optparse，这个和 Perl 里面的 GetOpt 模块有些类似，应该是用来对传入的参数作解析的，option parse 么，简单。第二个是 fileutils ，字面来说，文件处理中需要杂七杂八的函数功能都在里面了。那么在后面的代码中，我们应该能看到这两个模块（姑且先这么称呼）中的一些相关的方法调用的。
+
+来，喝口茶。接着看：
+<pre><code>cdir = File.expand_path(File.dirname(__FILE__)) %w( /libraries/ /app/models /app/controllers ).each { |dir| $:.unshift(cdir + dir) } %w( web_controller_server action_controller_servlet wiki_service wiki ).each { |lib| require lib }</code></pre>
+这里有点意思了。一共三句话（三句语句）。第一个，我们注意到最后面的 <em><span class="caps">FILE</span></em> ，写法上和 Perl 一模一样，猜想应该就是当前程序代码文件的文件名（包含路径）了。（当然 Perl 里面还可以用 $0 来表示。）这里我们也看到了小括号，那么自然的按照通常的优先级，我们从里面往外看这句句子。刚才讲了 <em><span class="caps">FILE</span></em> ，围在外面的是
+<pre><code>File.dirname(__FILE__)</code></pre>
+我们看到了首字母大写的 File ，然后是个小数点，然后是个 dirname。直觉告诉我，小数点是 Ruby 中类调用类方法的运算符，虽然 Perl 里面用的是 → 不过好像 Perl6 也将要用点来做同样的事情。File 应该是类名，很可能这个类就来自刚才看到的 fileutiles 文件，接着 dirname 就是取目录名称的方法。ok，连起来看一遍，使用 File 类的 dirname 来解析当前文件名所对应的目录名称，也就是路径。
+<pre><code>cdir = File.expand_path(...)</code></pre>
+还是 File 类，这次是 expand_path 方法，故名思议，展开路径信息，并赋值给 cdir 这个变量。我们注意到：
+<ul>
+	<li>赋值操作和 Perl 没什么不同</li>
+	<li>变量不需要申明，直接用就可以，也没有类型的讲法，该是什么就是什么，直接用就可以，连 $ 都省掉了，符合懒人的习惯，我喜欢。</li>
+</ul>
+第二句有点奥妙了。按照自然语言的解读特点，先把这句分段，一前一后一共两段，前段大致上是 %w( ... ).each ；后段则是大括号括起来的部分，这部分又分为两段，前段 |dir| ，后段做了个什么操作。大体上给人的感觉就是要依次取出若干样东西，然后作 unshift 操作。第三句和这句结构上有点像。不同的是后面的操作不太一样。我们知道，Ruby 里面什么东西都是对象，所以 .each 的写法表示点之前的部分就是一个什么类。%w( ... ) 的结构好比是 Perl 中的 qw( ... ) 结构，该是把其中的单词作为元素放到一个数组中，不过这种写法允许你不用逗号和引号，这点上再次印证了 Ruby 和 Perl 都是为懒人创造的语言这一常识。each 应该是对数组对象的操作，依次取出其中的元素。取出来做什么呢，做后面的操作。第三句中，我们看到的后半段：
+<pre><code>{ |lib| require lib }</code></pre>
+熟悉的 require 指令又来了，这次他不是具体的外部文件的名称，而是 lib 。lib 是什么？看到前面的 |lib| 写法吗？应该就是它吧？联想到了什么？$_ ? 呵呵，两个竖线表示其中的变量为内参，接受传递进来的数据，以便代码块中应用。说到代码块，看来 Ruby 也不是像 Python 那样完全抛弃花括号的。读到这里，我有点不快，Perl 里面类似的写法： { require } 就可以了，简洁掉好几倍。Ruby 有时候也挺啰嗦的，就像我一样。概括起来，它要依次载入名为 web_controller_server、action_controller_servlet、 wiki_service、wiki 四个外部模块。
+
+有了对第三句的理解，再回过来看第二句德后半段：
+<pre><code>{ |dir| $:.unshift(cdir + dir) }</code></pre>
+这里我们很容易就可以理解 |dir| 和 dir 的意义了，前半段列出了三个 dir ，现在依次传入，然后，cdir + dir ，cdir 在前面已经讲过了，是当前运行的 ruby 程序所在的路径，加上传入的 dir ，变为新的目录。这里我们看到：
+<ul>
+	<li>+ 可以用于字符串的连接操作</li>
+</ul>
+$:.unshift 看起来很怪，按照上面的经验分析一下，它要执行 unshift 方法，Perl 里面也有 unshift ，目的是把一个元素从数组的头部（也就是左边或者上边）压入（好比子弹上膛），那么推论点号之前的 $: 应该是个数组。第二句就是要把各个分目录压到一个数组里面去。我们纵览一下后面的代码，好像没有再次用到数组变量 $: 的地方，而压入的三个目录都是些 lib 目录，这次你又联想到了什么？@INC ? hoho，好像这样的联想非常合理哦，Ruby 的作者以前是不是 Perl 程序员阿？这里我们推测：
+<ul>
+	<li>$: 是系统默认的特殊变量，雷同 @INC ，以便代码通过它来搜索定位要调用的外部模块。Ruby 中还是用到了 $ 符号的，也用了一个其他非字母符号跟在后面，意图表达一个特殊的变量。推想：</li>
+	<li>是不是 Ruby 中的数组用 $ 开头来表示呢？</li>
+</ul>
+继续往下看，很简单的赋值语句：
+<pre><code>fork_available = true</code></pre>
+这里有些像 Java ，推想：
+<ul>
+	<li>Ruby 里面的布尔值通过关键字 true 和 false 来表示。</li>
+</ul>
+后面代码中马上出现了 false 关键字，初步证实了上面的推想。
+<pre><code>begin   exit unless fork rescue NotImplementedError   fork_available = false end</code></pre>
+开始有些复杂了。这里我们看到了一个 begin … rescue … end 结构。fork 需要介绍吗？fork 就是要复制当前进程，于是 fork 后就有两个相同的进程在内存里面运行。记得我们启动 instiki 的时候是什么样的吗？如果你是个细心的人，并同时试验过 Unix 和 Windows 环境，那你可以说，它们是不一样的。我们知道，Windows 下面不支持 fork（至少在 Perl 里面是这样，这里也应当如此），所以 Windows 下面运行后，Command 窗口中 ruby 程序没有结束，光标在闪，有请求到来的时候会显示若干信息，如果关掉这个窗口，wiki 的 http 服务也就停掉了。而 Unix 下面，fork 天生的环境里，你运行完 ruby instiki.rb 它输出几行信息就又回到了 shell 提示符状态。这时候你 ps 一下就会看到有个 ruby 进程在那边跑。不用多说了，这里的 fork 就是这回事情。那么好，
+<pre><code>exit unless fork</code></pre>
+我们知道，通常 fork 函数在完成复制一个相同进程后，返回一个进程 id 。在原来的进程，也就是父进程里面，fork 返回 0 ；而在新复制出来的进程，也就是子进程里面，fork 返回子进程的进程 id （也就是 pid，一个操作系统内不重复的数字编号）。exit unless fork 的意思就是父进程退出，子进程继续。这和在 Unix 下面看到的实际运行情况一致。
+
+可是在 Windows 平台是不支持 fork ，那它又是如何继续执行的呢？后面一句：
+<pre><code>rescue NotImplementedError</code></pre>
+又让你联想到了什么？不好意思，我是用 UltraEdit 打开的 .rb 文件，同时我也下载了 Ruby 语言的语法高亮显示定义文件并加载到 UltraEdit 的 wordfile 中，所以我看到的这句话，resuce 是蓝色的，NotImplementedError 是红色的。
+
+说到这里，我补充一下，根据颜色，其实可以判断出很多东西的。比如上面提到的变量 <span class="caps">RUBY</span>_VERSION 和 “Instiki requires Ruby 1.8.1+” 字符串都显示绿色，说明 <span class="caps">RUBY</span>_VERSION 是特殊变量，类似 Perl 中的标量类型。我看到 if begin end rescue unless 什么的都是蓝色，所以这些都是 Ruby 语言的保留字。puts exit require each unshift 都是棕色，说明它们都是系统内置的方法。
+
+回过来看，NotImplementedError 显示红色，应该是 Ruby 语言内置的错误类型的表示。字面意思是：拯救 – 不可操作错误。还是之前的问题，联想到了什么？
+<pre><code>eval { ... }; die $@ if $@;</code></pre>
+是这个么？或者 Java 里面的：
+<pre><code>try { ... } catch { ... }</code></pre>
+rescue 是不是用来捕获一些异常或者错误的呢？如果 fork 不能执行（Windows 上就是如此），那就捕获这种名为 NotImplementedError 的错误，并为了拯救或者挽回，执行 rescue 到 end 之间的代码。这段代码没什么花头，一个赋值语句，标注了 fork 不可用的状态。
+
+接着看：
+<pre><code>begin   pdflatex_available = system "pdflatex -version"  rescue Errno::ENOENT   pdflatex_available = false end</code></pre>
+刚才见过的结构又来了，这次看起来容易得多。system 应该和 Perl 的一样，将后面的字符串作为 shell 命令来执行，并返回执行结果。很明显，程序想知道 pdflatex 执行文件的版本。这里有个疑问，system 返回的是版本号呢还是进程退出码？做个实验吧，到此为止我们都是靠猜想和推论，还没有实际动过手，毕竟这不是严谨的治学态度。在我的 Windows 上的 Command 窗口执行：
+<pre><code>ruby -e "puts system 'ls'"</code></pre>
+呵呵，我猜想和 Perl 一样的 -e 用法居然也是可以用的。同时也可以用单引号定义字符串。结果输出：
+<pre><code>-e:1: warning: parenthesize argument(s) for future version false</code></pre>
+Windows 上面当然没有 ls 命令，所以有个 warning，然后输出了 false 字符串。所以结论有了，system 返回的是布尔值。为了验证这个推想，把上面的 ls 改为 dir ，再运行，目录清单列出来了，最后还附加了一个 true 。实验成功！看来老毛说的不错，理论和实践相结合，呵呵。
+
+回过头来再看，instiki 要知道是否 pdflatex 可用。那如果捕获 Errno::ENOENT 错误呢，就改变相应的变量值为 false 。那么 Errno::ENOENT 又是什么呢？Perl 里面也是有的，Perl 有个 Errno 模块，它引用了 <span class="caps">POSIX </span>中的 <span class="caps">ERRNO </span>相关的错误常量，ENOENT 是其中之一。那么 <span class="caps">ENOENT </span>表示什么意思呢？既然是 <span class="caps">POSIX </span>里面来的，也就是说这是符合 <span class="caps">POSIX </span>规范的操作系统上底层的相关错误状态定义。你以前写程序，打开一个文件的时候，是不是要检查一下文件是否存在？如果不存在，代码又不能继续的话，通常都会输出一段错误信息，这时候 $! 包含的内容就是 “No Such File or directory”，不过这是段表述错误类型的字符串，在文件系统底层，它的代号就是 <span class="caps">ENOENT </span>。呵呵，说得有点远了，不过我想提一下还是有必要的。老实说，我也就知道这一个错误代号，你问我别的，我就要去问 Google 了。
+
+这里我们看到了双冒号的写法。于是我又猜想：
+<ul>
+	<li>Ruby 使用 :: 表示或者引用类中的相关事物（变量，常量等）</li>
+</ul>
+继续，不要停：
+<pre><code>OPTIONS = {   :server_type => fork_available ? Daemon : SimpleServer,   :port        => 2500,   :storage     => "#{File.expand_path(FileUtils.pwd)}/storage",   :pdflatex    => pdflatex_available }</code></pre>
+哈希变量赋值？权当这么理解吧。关键字用冒号开头，然后用 => 连接键值对。这里我们又看到了一些眼熟的东西：
+<ul>
+	<li><em>条件</em> ? <em>为真运行这里的表达式</em> : <em>为假运行这里的表达式</em> 这种结构的简单条件判断语句。</li>
+	<li>#{...} 的写法，类似 Perl 的 ${ ... } 的写法，那句话的意思就是，通过 FileUtils 类的 pwd 方法取得当前路径，并通过 File 类的 expand_path 方法展开路径，然后通过 #{...} 运算将结果反引用为字符串，并在双引号中引用该值，与 /storage 合起来成为新的路径信息，用于确定存储信息的目录。</li>
+</ul>
+<div class="byline">Revised on January 19, 2005 02:44 by <a class="existingWikiWord" href="http://blog.chunzi.org/wp-admin/chunzi.html">chunzi</a></div>

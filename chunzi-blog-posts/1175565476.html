@@ -1,0 +1,24 @@
+Javascript 实现 ORM
+
+最近又开始看以前订阅的 RSS，享受了很多发现的乐趣。而今天让我诧异的是这个，<a href="http://blog.simon-cozens.org/">Simon Cozens</a> 介绍了他自己写的 <a href="http://dev.simon-cozens.org/thingle/browser/trunk/chrome/content/class-dbi.js">class-dbi.js</a>。
+
+奇怪，怎么 JavaScript 也可以调用数据库？顺藤摸瓜，<a href="http://developer.mozilla.org/en/docs/Storage">看这里</a>， Mozilla 为了让扩展可以使用持续数据，提供这样的一个 API ，后端使用 SQLite 存储数据。目前这个接口尚未定型，Simon 却已经自己使用类似 <a href="http://search.cpan.org/perldoc?Class::DBI">Class::DBI</a> 的语法写了 JavaScript 的类，所以可以先从接口定义数据库文件和相关的连接：
+<pre>var file = Components.classes["@mozilla.org/file/directory_service;1"]
+                     .getService(Components.interfaces.nsIProperties)
+                     .get("ProfD", Components.interfaces.nsIFile);
+file.append("asdf.sqlite");
+var storageService = Components.classes["@mozilla.org/storage/service;1"]
+                     .getService(Components.interfaces.mozIStorageService);
+var mDBConn = storageService.openDatabase(file);</pre>
+然后定义数据和类的映射关系：
+<pre>function Mail () {}; databaseclass(Mail, "mail");
+function Attachment () {}; databaseclass(Attachment, "attachment");
+function Entity () {}; databaseclass(Entity, "entity");</pre>
+于是，就可以用这样的语法操作数据了：
+<pre>var mail = Mail.retrieve(msgid);
+if (!mail) mail = Mail.create({ message_id: msgid, message: body });
+// ...
+mail.last_read((new Date).toUTCString());
+// ...
+mail.drop();</pre>
+酷毙了。

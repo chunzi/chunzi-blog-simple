@@ -1,0 +1,25 @@
+Ubuntu 上时间同步
+
+突然发现有台 vmware 虚拟机里的时间已经变成了明天！这可不好，会闹出大乱子的。直接用 <code>date</code> 设定现在的时间恐怕也是治标不治本。于是想到时间同步。
+
+按照<a href="http://www.pool.ntp.org/use.html">这里的说明</a>，归纳如下：
+
+<code>sudo apt-get install ntp
+sudo echo server 0.pool.ntp.org &gt;&gt; /etc/ntp.conf
+sudo echo server 1.pool.ntp.org &gt;&gt; /etc/ntp.conf
+sudo echo server 2.pool.ntp.org &gt;&gt; /etc/ntp.conf
+sudo /etc/init.d/ntp restart</code>
+
+看看效果：
+
+<code>$ntpq -pn
+remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
++91.189.94.145   192.36.133.17    2 u   55   64  377  510.562  -177.61  48.495
+-208.38.65.35    48.142.90.237    2 u   58   64  377  260.369  -198.92  66.197
+*209.132.176.4   .CDMA.           1 u   59   64  377  176.737  -84.811  46.291
++218.21.130.42   76.169.237.141   2 u   56   64  377   45.210  -150.48  71.819</code>
+
+或者用 <code>date</code> 命令看看是否同步了。
+
+貌似这个 ntp 服务起来后和指定的服务器通信，获取准确的时间然后更新。所以以后不用人为干预了。而 [012].pool.ntp.org 提供的服务，每次都会返回不同 ip 的服务器，这样保证不会应为单点服务中断而影响，和 Raid5 有异曲同工之妙。

@@ -1,0 +1,13 @@
+HTML 洗刷刷
+
+webmail 上如何显示 HTML 格式的邮件正文？用 iframe；或格式化后嵌入当前页。
+
+iframe 可以最大限度还原原来的 HTML 页面效果，但存在安全隐患。而且可能需要用户横向移动滚动条，不宜阅读。直接将源代码嵌入当前的显示页面，也存在安全隐患，而且很容易引入 css 而使 webmail 的整体风格破坏。除了 Js 带来的问题，还可能由于 HTML 中引用了外部的“图片”，而暴露邮件账户的真实性 -- 垃圾邮件制造者可以通过一个形如静态图片连接的程序，在纪录邮件地址的有效性后，返回一张图片的二进制数据流。所以，Gmail 会提示是否现实外部图片。
+
+仔细参考 Gmail，它是用了后种策略。而且，不光是去掉了 js 和 css ，还对外部图片和外部连接作了处理。 默认，img 标签被去除了 src 属性。所以仅显示占位区。而 a 标签增加了 onclick 事件绑定，这样，点击邮件中的连接不再直接当前 webmail 页面中跳转，而是新开窗口。对于 class 和 style 属性，Gmail 也都作了删除处理。所以 Gmail 给你的并不是原汁原味的 HTML 邮件。
+
+未必一定要原汁原味 - Gmail 是这样处理的，作出这样的决定，就我而言，是不容易的。我总希望能“高保真”。如何取舍？用户关心什么？在乎视觉效果？还是在乎邮件所表达的信息？Gmail 给了我一个很好的启示。
+
+于是，我希望有一种类似的方法处理原始 HTML 数据。当然，可以用 HTML::Parser 来做，不过太过低级别。因为我们还有 <a href="http://search.cpan.org/perldoc?HTML%3A%3ASanitizer">HTML::Santizer</a> ，<a href="http://search.cpan.org/perldoc?HTML%3A%3AScrubber">HTML::Scrubber</a> 和 <a href="http://search.cpan.org/perldoc?HTML%3A%3ATruncate">HTML::Truncate</a> 。
+
+这三个有所类同，又有所区别。我还是比较习惯于 Scrubber 。记以抛砖引玉。

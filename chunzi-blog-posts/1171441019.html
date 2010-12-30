@@ -1,0 +1,20 @@
+script 和 scriptreplay
+
+这是两个命令。script 好比是摄影机，它帮你录下在 shell 里操作的全过程。scriptreplay 就好比是录像机，把录下来的东西回放给你看。Joe 用它来帮助教学，这样就不必每次上课的时候重复操作演示。<a href="http://joe-jiang.livejournal.com/94388.html">这里是 joe 的演示</a>。
+<pre>$ script
+Script started, file is typescript</pre>
+script 开始运行，并把操作记录保存到默认的日志文件 typescript 中。然后随便你做些什么，比如说 ls 之类的，然后 Ctrl+D 或者输入 exit 退出：
+<pre>$ exit
+Script done, file is typescript</pre>
+现在你可以 <code>more typescript</code> 一下，其中可以看到你一系列操作的痕迹。包括退格键之类的。
+
+单是如此还不能用 scriptreplay 播放，因为每个操作没有对应的时间索引信息。所以这次试试看：
+<pre>$ script -t 2&gt; time.log
+Script started, file is typescript</pre>
+<code>-t</code> 的意思是把时间点数据往 <code>STDERR</code> 输出，当然我们不希望这些时间数据混杂在我们稍后的操作中，所以用 <code>2 &gt; time.log</code> 重定向到 time.log 文件中。然后试着做些操作，最后退出。这时候就可以回放了，如下，scriptreplay 的第一个参数是时间索引文件，然后才是 script 的日志文件：
+<pre>$ scriptreplay time.log typescript</pre>
+看到了什么？如果你想 2x 的速度回放，可以
+<pre>$ scriptreplay time.log typescript 2</pre>
+试试看把 2 改为 0.5 ？
+
+谢谢 joe 分享了这两个奇妙的工具。除了教学中可以用之外，我想诸如报告 bug ，协作开发，或者记录 cron 作业或者其他 shell 脚本的操作过程等方面也都可以用。比起用 flash 录制，它更轻便，而且保存了 native 的字符编码，便于调试分析。绝对 Coool。

@@ -1,0 +1,9 @@
+PerlChina 会员中心站点恢复
+
+很久以前，不知怎么的，访问的时候报错，看似底层没有正常加载 CDBI 的表关系定义，也不知道怎么解决，当时心情烦躁，很快不了了之。
+
+这次写简历，提到了这个站点，却不得不注明当前维护中，觉得是个心病。于是刚才抽了点时间再看看。花了一个多小时，搞定。可能是  Catalyst  的一个小版本的 Bug  导致的，同时还更新了  Class::DBI  这个模块也升了好几级了。再后来页面能出来了，但一个 Tag 或者 Place  下的人却只有一个，确定 tag.persons 失效，调试发现，Class::DBI::Loader::Relationship 用到的转换英文单复数的 Lingua::EN::Inflect::Number 的模块，把 person 的复数修订为 people. 所以 tag.persons 当然是什么都不返回，改成 tag.people 就好了。
+
+svn status 了下，很久以前的最后更新（大约是一年之前了）都没有 commit，现在看看很多代码都已经过时了。而且还有很多想法没有实现，幻想着能有有时间重新整合下。虽然这个站点访问量不高，不过下线的这段时间有很多人问及，所以不管怎样，还是先挂上来，以后再说。
+
+还有 wiki.perlchina.org 一直是我的心病，自从遭受 Spam 攻击以来，Instiki 一直表现不好，连它自己的站点和 Rails 的 wiki 站点也惨遭毒害，现在的 Instiki 老吃资源然后死掉，用 cron 程序定期启动也快一年了吧，还要定期删除 /tmp 下的 ruby_session 文件。

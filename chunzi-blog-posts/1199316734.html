@@ -1,0 +1,15 @@
+sshfs
+
+客户的机器是 FreeBSD 两年多前配的，内网，无法连接到外部，只有 cvs 没有 svn。希望在该服务器上修改代码测试，也希望使用 svn 管理和维护。罪敏捷的方法就是用 sshfs 挂接，然后在本地 ubuntu 的文件系统上进行 svn 操作和更新。实践证明行之有效，服务器不用作任何改动，只需要一如既往提供 ssh server。
+
+sshfs 就是通过 ssh 连接挂载远端文件系统的工具，基于 fuse 软件。ubuntu 下面只需要安装它并将自己用户加入 fuse 组：
+
+<pre>sudo apt-get install sshfs
+sudo adduser chunzi fuse</pre>
+
+然后重新登录下就可以用：
+
+<pre>mkdir remote
+sshfs username@server:/path/to/remote/fs remote -o workaround=rename</pre>
+
+后面的参数用来在 svn up 的时候可以自动更新文件。

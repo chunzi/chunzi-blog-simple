@@ -1,0 +1,9 @@
+MIME-Lite-TT-HTML-0.01
+
+看到 cpan 出来了个 MIME-Lite-TT-HTML-Japanese 模块。
+
+之前就有个 MIME-Lite-TT-Japanese 模块，为了解决字符集的问题，不过它 hardcode 为日本的常用字符集，所以在自己的项目中作了个简单的 MIME::Lite::TT::Charset 来完成工作。
+
+这个新的 HTML::Japanese 增加了对邮件中 html 正文和 text 正文的支持。Okey，我就像要一个更为抽象或者通用的模块来处理这些事情。结合之前的经验，大多数国人所用的邮件客户端尚不能很好的支持 utf8 标准字符集，而我又希望项目使用 utf8 来实现，所以除了制定字符集外，我还希望能有字符集转换的功能：项目以及模版都用 utf8 ，发送出去的邮件中，使用转换结果：gb2312。
+
+于是动手自己做了一个，MIME::Lite::TT::HTML，虽然很不好的爬到人家头上去了，不过想来想去也只有这个比较合适。源代码已经上传到 svn.perlchina.org ，也刚刚上传到 cpan。

@@ -1,0 +1,16 @@
+使用 curl 提交 twitter 消息
+
+一直对 twitter 不怎么感冒，貌似没有必要让朋友知道我每时每刻的行踪，也没有朋友需要了解我的 timeline。不过随手一句话用来发发牢骚。做个小笔记什么的还是蛮不错的，特别是当提交信息的方式可以离线用手机发。
+
+与此同时，twitter 的 API 提供了无限的创造力和可能性。除了在 Gmail 里向 twitter bot 发消息外，最便捷的莫过于在随时开着的终端 shell 里面写上一句然后敲回车。
+
+找来这段脚本，用 curl 一下搞定。
+
+<pre>
+#!/bin/bash
+read -p "twitter> " -e input
+curl --basic --user username:password --data status="$input" http://twitter.com/statuses/update.xml > /dev/null
+echo "OK"
+</pre>
+
+修改其中的用户名密码，保存为 <code>twitter</code> ，再 <code>+x</code> 后扔到 <code>/usr/local/bin</code> 里面，然后就可以直接通过执行这个命令来发消息了。十分 handy 的东西。

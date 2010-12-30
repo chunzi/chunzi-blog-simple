@@ -1,0 +1,42 @@
+与神同在 - screen
+
+2005 年 PerlChina 上海聚会的时候，Joe Jiang 就兴致勃勃地向我们就介绍说 <code>screen</code> 如何奇妙。只可惜当时的我木呐有余，就当是看变戏法一样，过后就没放心上。许久以来，这多少也是我心中未决的事情之一。既然 《BSD HACKS》也提到了这个命令，不如像模像样的学学用用看吧。我买的是中文版的书，印刷还不错，谬误却不少。此乃题外话。
+
+<code>ssh</code> 远程连接到服务器，当你正在编辑一个文件调试错误的时候，公司的破网再次断线，你一定会抓狂。网通了，再连上去，重新 cd 重新 vi 。或者，你正在服务器上运行一个漫长的测试，而下班时间到了，是中断现在的进度，回家从新开始呢还是继续加班？ <code>screen</code> 就是你的救星。
+
+把 <code>screen</code> 想象成服务器上的一个无形的 windows 窗口。在你登录到服务器上之后，打开这个窗口，然后在里面干活吧。在你要暂时离开或者意外断线，就好比暂时最小化了这个窗口。在你重新登录到服务器上的时候，你再最大化这个窗口，继续做事。就这么简单。
+
+下面的示例都在远程的服务器上运行，当然你也可以在本地的 Ubuntu Desktop 上测试。这个无所谓。
+
+开一个终端，输入：
+<pre>$ screen -S chunzi</pre>
+<code>-S</code> 参数指定一个名字，以后我们可以通过这个名字再打开这个虚拟窗口。
+
+貌似 clear 了一下，然后还是在 shell 里面。实质上，我们这个时候已经在 screen 里面了。screen 有很多命令，要键入这些命令，都需要先键入 CTRL+a。我们可以在里面先 ls 一下，然后 CTRL+a, d 离开虚拟窗口。d 就是 detach。你会看到又回到了之前的 shell ，输出的那一行告诉你暂时离开了 screen。
+<pre>$ screen -S chu
+[detached]</pre>
+窗口到哪里去了？用 <code>-ls</code> 参数，也可以用 <code>-list</code>。
+<pre>$ screen -ls
+There are screens on:
+        9309.chunzi        (Detached)
+1 Sockets in /var/run/screen/S-chunzi.</pre>
+我是个好奇的人，到 /var/run/screen/S-chunzi 下面一看：
+<pre>$ ls -l /var/run/screen/S-chunzi
+prw------- 1 chunzi chunzi 0 2007-02-16 16:52 9309.chunzi</pre>
+看到开头的 <code>p</code> 了吗？嘿嘿。
+
+现在如果重新进入 <code>screen</code>，可以：
+<pre>$ screen -r chunzi</pre>
+<code>-r</code> 是 reattach 的意思。自然的，我们看到了先前在 chunzi 那个虚拟窗口下的 shell 内容，原先操作的记录都还在。
+
+假如你没有 detach 出来，就到同事的位子上，要给他看你刚才做的事情，可以登录服务器之后，用
+<pre>$ screen -rd chunzi</pre>
+来断开之前你自己座位上的那个。d 还是 detach 的意思，<code>-rd</code> 就是说，我要接管。如果回到座位，你会看到：
+<pre>
+$ screen -r chunzi
+[remote detached]</pre>
+当然 <code>screen</code> 用起来不止于此，你可以在 screen 里面开几个不同的终端窗口。比如 CTRL+a, c 就是 Create 一个新窗口。CTRL+a, x 就可以锁定你这个 session，必须要键入密码才能继续。
+
+有趣的是，当一处用 <code>x</code> 命令锁定的时候，你是可以用 <code>-r</code> 没有 <code>d</code> 的形式连到相同的虚拟窗口中。此时你再解锁，无论你在哪一个窗口操作，都可以在另一个窗口中观看操作的过程！这样，你和你的同事可以一起做一件事情，XP 结对开发从此可以让两个人天各一方！
+
+有了 <code>screen</code> 你就不再担心什么，随时随地都可以继续停留在虚无中的桌面。就好像神在替我们保管一样。现在我才明白 Joe 以前为什么那么兴奋地要于我们分享，只要家里的机器开着，他在任何仅有 putty 的地方，都可以继续写 blog，看书，上 irc 聊天，随时随地，无所限制。典型的 hack 作风。

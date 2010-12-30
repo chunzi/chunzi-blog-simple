@@ -1,0 +1,76 @@
+如何创建 RSS2.0 摘要文档
+
+因为要做 member.perlchina.org 的缘故，希望提供 RSS 摘要给会员，以便掌握最新会员的标签、地域等情况，所以需要了解一下如何创建 RSS2.0 Feed，正巧看到一篇文章，拿来翻译一下，顺便也简单学习学习。原文来自：<a href="http://www.petefreitag.com/item/465.cfm">http://www.petefreitag.com/item/465.cfm</a> 。以下为正文：
+
+如果你学过一些 HTML 知识的话，那要学习如何创建 RSS2.0 摘要文档是件很容易的事情。接下来，我会循序渐进地带着你一步一步做。
+
+<strong>第一步，XML 声明</strong>
+
+因为 RSS 2.0 必须是合法的 XML 文档，所以第一行必须是 XML 声明。
+
+<pre>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+</pre>
+
+虽然文档编码（encoding）是可选的，不过我们依然推荐你使用它。当然如果你的文档不使用 utf8 编码的话，你需要修改这一行。
+
+<strong>第二步，RSS Channel</strong>
+
+在这一步里面，我们开始打开 rss 标签和 channel 标签，所有的摘要内容都将被包含在这两个标签以内。
+
+<pre>
+&lt;rss version="2.0"&gt;
+&lt;channel&gt;
+</pre>
+
+<strong>第三步，RSS 摘要信息</strong>
+
+接下来把实体的相关信息，诸如标题，描述，url 连接等信息写到 RSS 文档中去。
+
+<pre>
+&lt;title&gt;The title of my RSS 2.0 Feed&lt;/title&gt;
+&lt;link&gt;http://www.example.com/&lt;/link&gt;
+&lt;description&gt;This is my rss 2 feed description&lt;/description&gt;
+&lt;lastBuildDate&gt;Mon, 12 Sep 2005 18:37:00 GMT&lt;/lastBuildDate&gt;
+&lt;language&gt;en-us&lt;/language&gt;
+</pre>
+
+lastBuildDate 是该摘要的最后修改日期和时间。日期格式必须符合 RFC 822 规范。在 CFML 中，DateFormat 的格式化字符应为 ddd, dd mmm yyyy ，而 TimeFormat 的格式化字符应为 HH:mm:ss 。日期应当使用 GMT 时间。lastBuildDate 并非必须，不过还是强烈推荐使用。
+
+<strong>第四步，RSS 条目</strong>
+
+接下来我们要枚举各个 RSS 条目，每个条目都包含标题，连接，描述，发布时间以及 guid。
+
+<pre>
+&lt;item&gt;
+	&lt;title&gt;Title of an item&lt;/title&gt;
+	&lt;link&gt;http://example.com/item/123&lt;/link&gt;
+	&lt;guid&gt;http://example.com/item/123&lt;/guid&gt;
+	&lt;pubDate&gt;Mon, 12 Sep 2005 18:37:00 GMT&lt;/pubDate&gt;
+	&lt;description&gt;[CDATA[ This is the description. ]]&lt;/description&gt;
+&lt;/item&gt;
+&lt;!-- put more items here --&gt;
+</pre>
+
+需要对包含在标签内的文字作 HTML 实体编码，免得引起 XML 文档格式非法。
+
+<strong>第五步，关闭 Channel 和 RSS 标签。</strong>
+
+<pre>
+&lt;/channel&gt;
+&lt;/rss&gt;
+</pre>
+
+<strong>第六步，验证你的摘要文档</strong>
+
+你可以使用<a href="http://feedvalidator.org/">FeedValidator.org</a>来验证。
+
+其他需要注意的事项：
+<ul>
+<li><strong>Content Type</strong> - 参见我的另一篇文章 <a href="http://www.petefreitag.com/item/381.cfm">content types for RSS feeds</a> </li>
+<li><strong>Encoding</strong> - 你应该在你的 HTTP 头的 Content-Type 中以及 XML 声明中包含该编码信息。</li>
+<li><strong>Styling</strong> - 如果你想要你的 RSS 看起来更漂亮些，你可以 <a href="http://www.petefreitag.com/item/208.cfm">CSS stylesheet for your RSS feed</a></li>
+<li><strong>Categories</strong> - 在 RSS 摘要中使用 category 标签是个非常好的主意。你可以在每个条目标签内加上 category 标签，一个条目内可以写上多个这样的类型标签。</li>
+</ul>
+
+以上我简单的归纳总结了你可以做的 RSS 摘要文档的创建过程，你可以进一步阅读 <a href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 Spec</a>。

@@ -1,0 +1,19 @@
+至于 Catalyst 的安装
+
+至于 Catalyst 的安装，它首先需要 Module::Build
+
+<pre>perl -MCPAN -e "install Module::Build"</pre>
+
+其次，Bundle::Catalyst 好像有些古老了，所以我是不用的。所以，简单的，只需要
+
+<pre>perl -MCPAN -e "install Catalyst"</pre>
+
+不过这仅仅是个框架，关于 Model 和 View 部分的依然没有上去，这就看你选用什么 model 和 view 了。
+一般使用 CDBI 和 TT ，所以，
+
+<pre>perl -MCPAN -e "install Catalyst::Model::CDBI"
+perl -MCPAN -e "install Catalyst::View::TT"</pre>
+
+基本上就可以了。如果选用某些 Plugin 那么很简单的，安装那些你要用的 Plugin，比如：
+
+<pre>perl -MCPAN -e "install Catalyst::Plugin::Prototype" </pre>

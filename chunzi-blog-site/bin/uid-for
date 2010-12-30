@@ -1,0 +1,9 @@
+#!/usr/bin/perl
+use Class::Date qw(date now);
+my $date_string = shift;
+my $date = date( $date_string || now() );
+my $uid = $date->epoch;
+
+printf "date: %s\n", $date;
+printf " uid: %s\n", $uid;
+

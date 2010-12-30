@@ -1,0 +1,7 @@
+不用图片实现圆弧边角的背景框
+
+如果给你这个课题，你会怎么解决？我想不到。以前很自然的，用表格，四角用四张图片（圆弧边角）。虽然很麻烦，不过在 TT2 里面，把它封装为一个 tpl 文件，然后调用 Wrapper 指令，用起来也还算方便。
+
+来<a href="http://pro.html.it/esempio/nifty/">看看这里</a>。上面有若干例子，看了就明白了。基本原理是先放置上下各四个 inline 特性的标签（为了简单，使用标签 b 而不是标签 span），然后对它们的定位，逐个缩近，并使用 overflow: hidden，使它们的顶角构成圆弧边缘的像素。那么看起来的效果就好像是个小圆弧了。
+
+该文作者说道：“An idea is nothing more nor less than a new combination of old elements.” -- 创意无非是已有事物的重新组合。这在本案例的形式上如此，思想上更是如此。

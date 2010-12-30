@@ -1,0 +1,89 @@
+LinuxMCE 安装包掠影
+
+<a href="http://www.linuxmce.com/">LinuxMCE</a> 是一个类似 Widows 的 Media Center Edition 的软件包。目的是提供免费的集成的家庭媒体中心。目前只能安装在 Ubuntu 6.10 的系统上。完成安装后你的计算机就可以像一台超级电视机一样，上电就可以用。当然它的功能不局限于播放媒体文件，貌似是要整合所有的家电，让你的家成为智能住宅。
+
+但是很遗憾，我没能安装起来，看上去可能是安装脚本的问题。不过这个不是我要说的，一番好奇，展开了下面的探索之旅：
+
+安装需要一张 Linux MCE 的光盘，并下载一个 installer 的包。安装这个 deb 包之后，在桌面上就出现了 Install Linux MCE 的快捷方式，图标是一个红色的光盘。其实说快捷方式不够准确：
+
+<pre>lrwxrwxrwx 1 root  root  46 2007-03-27 16:25 mce-installer.desktop -> /usr/share/mce-installer/mce-installer.desktop</pre>
+
+显然，这个安装包的东西都放在了 /usr/share/mce-installer 下面：
+
+<pre>$ cd /usr/share/mce-installer/
+$ ls
+mce-installer.desktop  mce-installer.sh</pre>
+
+为什么桌面的那个图标显示那样的光盘，这是因为这是一个 Gnome 的配置文件：
+
+<pre>$ cat mce-installer.desktop
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Install Linux MCE
+Comment=Install Linux MCE Media Center
+Exec=gksu /usr/share/mce-installer/mce-installer.sh
+Icon=/usr/share/pixmaps/gnome-cd.png
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=GNOME;Application;Audio;Music;Player;AudioVideo;X-Ximian-Main;X-Novell-Main;X-Red-Hat-Base;</pre>
+
+所以以后自己也可以做这些类似的事情。我记得 windows 下面的快捷方式也是类似这样的配置文件。
+
+再来看那个 <code>mce-installer.sh</code> 。运行的时候它会开始一个图形界面的窗口向导，这是怎么做到的呢？我知道 GUI 的部分应该是 Python 写的，不过这个脚本展示了一些我原来不了解的东西。先来看看它的内容：
+
+<pre>#!/bin/bash
+
+exec &>/dev/null </dev/null
+export DISPLAY=:0
+echo ""
+echo "Linux MCE Installer Starting ... please wait"
+echo ""
+
+# create a temp directory to extract to.
+export WRKDIR=`mktemp -d /tmp/selfextract.XXXXXX`
+
+SKIP=`awk '/^__ARCHIVE_FOLLOWS__/ { print NR + 1; exit 0; }' $0`
+
+# Take the TGZ portion of this file and pipe it to tar.
+tail -n +$SKIP $0 | tar xz -C $WRKDIR
+
+# execute the installation script
+
+PREV=`pwd`
+cd $WRKDIR
+./mce-installer
+
+# delete the temp files
+cd $PREV
+rm -rf $WRKDIR
+
+exit 0
+
+__ARCHIVE_FOLLOWS__
+...</pre>
+
+最后省略号的部分是二进制的数据，而 <code>__ARCHIVE_FOLLOWS__</code> 表征分割线，见该行：
+
+<pre>SKIP=`awk '/^__ARCHIVE_FOLLOWS__/ { print NR + 1; exit 0; }' $0`</pre>
+
+<code>$0</code> 就是这个脚本自己的文件名，用 <code>awk</code> 取出匹配分割线的这一行，然后输出下一行的行号，行号保存到 <code>$SKIP</code> 变量中，然后呢：
+
+<code>tail -n +$SKIP $0 | tar xz -C $WRKDIR</code>
+
+它用 <code>tail</code> 命令取出自己脚本中第 <code>$SKIP</code> 行及其后的文件内容，通过管道转给 <code>tar</code> 命令解压缩到指定目录。这时候我知道原来后面的数据是一个 .tar 压缩包。为什么不用一个独立的外部的 .tar 文件呢？我想单一文件的安装程序更方便，也更酷，就像 .exe 或者 .msi 文件一样。
+
+那个安装目录 <code>$WRKDIR</code> 早在之前就定义好了：
+
+<pre>export WRKDIR=`mktemp -d /tmp/selfextract.XXXXXX`</pre>
+
+不过看起来有点奇怪，目录名称中的一串 <code>X</code> 看上去像是模板，仔细往回看，原来是用 <code>mktemp</code> 创建目录，没见过的命令，查 man 文档：
+
+<pre>mktemp -- make temporary file name (unique)</pre>
+
+所以这里的 temp 不是 template 而是 temporary ，不过所要创建的文件或者目录确实可以用模板的形式：只有末尾的连续 X 才被替换为随机的字串，目的是要创建一个不重名的临时文件或者目录。不错，又学了一招。
+
+接下来的事情毫无悬念，到那个安装目录， 执行真正的安装程序。完成之后删除那个临时目录，结束。
+
+看起来很简单，不过着实满有趣的，略富技巧性的实现。

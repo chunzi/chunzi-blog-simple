@@ -1,0 +1,15 @@
+由 Behaviour.js 到 Degrader.js
+
+<strong>Behaviour.js</strong>
+
+Ajax 用起来很酷，可是你要要在 XHTML 里面写上 onclick，onmouseout，onkeyup 等等来触发调用一些 js function 。于是，Ben Nolan 在 <a href="http://bennolan.com/behaviour/">http://bennolan.com/behaviour/</a> 上发布了 <a href="http://bennolan.com/behaviour/behaviour.js">Behaviour.js</a> 。和之前谈到的 FSA::Rule 模块类似，只要在 XHMTL 中给出 id 并且定义好一些 Javascript 的 Rules，并把这些规则注册到 Behaviour 引擎中即可。至于规则的定义，分三部分，也就是对谁在什么时候做什么事情。通过 css selector 来实现“对谁”，所以之前定义的 id 在这里派上用场了，也是 js 和 xhtml 只见的纽带。“在什么时候”，也就是相关的事件出发，比如一系列的 on... 事件。一旦发生事件，就触发去做一件事情，“做什么事情”也就是要做事情的 js function ，至于其中如何，随你的便了。
+
+<strong> Degrader.js</strong>
+
+Encytemedia 觉得 Behaviour.js 不爽，很多业务细节暴露在外面，也就是不够抽象。于是<a href="http://encytemedia.com/blog/articles/2005/11/12/graceful-degredation-with-prototype-scriptaculous-and-ruby-on-rails-part-2-the-tools-of-the-trade">在这里（这是Part2）</a> 发布了他自己改良的 <a href="http://encytemedia.com/files/degrader.js">Degrader.js</a> 。废话少说，先看张图示：
+
+<img src="http://www.encytemedia.com/blog/files/html-dbase-relation.gif">
+
+通过对 id 名称的模式匹配，可以对许多个 id 绑定义系列的事件触发。所以，你只需要给出 pattern 并在 onMatch 的时候，动态注册一系列的事件观察（Event.observe），一旦发生了某个 event 就调用某个 function 。使用 Observe 设计模式，代码更为简洁优雅清晰。接下来该作者还会发布 Part3 给出一个实际的 RubyOnRails 应用。
+
+此外，W3C 开始介入 Ajax 相关的领域，成立了 <a href="http://www.w3.org/2006/webapi/">Web APIs Working Group</a> ，开始要制定一系列的标准。看来真的要革命了。

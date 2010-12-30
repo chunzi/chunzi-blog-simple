@@ -1,0 +1,11 @@
+cookies.js
+
+对于 Javascript ，并不算精通，不过常用的，或者说以前需要用的，基本上还是了解一点的。
+
+刚才作公司的代理平台，有个菜单做成了点击展开（或者收起）的 JS 效果，这个简单，DOM + CSS 几分钟搞定。但如果展开后，跳转到别的页面的话，菜单又会恢复收起的默认状态。每次都要点开很麻烦，所以系统应该“记住”用户最后的状态，并保持下去，直到用户改变这个状态。
+
+那么怎么“记住”呢？跟着表单提交？不现实，也未必每个连接都是表单。用 Ajax 在幕后提交到一个 action 然后保存到 $c-&gt;session 里面？我考，Ajax 看多了，用上繁复的技术绕上一圈，就为了保持一个简单的状态？Cookie! 最简单有效的办法我想就是用 Javascript 直接写 cookie 了。
+
+我是懒人，所以 Google ：Javascript Cookie 于是我发现了这个 <a href="http://www.netspade.com/media/cookies.js">cookies.js</a> ，<a href="http://www.netspade.com/articles/2005/11/16/javascript-cookies/">说明文档</a>也很简单，符合我的风格。用法也很简单，一个 setCookie(name,value) ，一个 getCookie(name) ，只要预先 load 那个 cookies.js 库就可以了。当下放到开发环境中，三十秒搞定。至于 cookies.js 里面到底干些什么，我才不关心。拿来用就是了。除非接下来哪一天有新的需求，到时候再说。
+
+比较欣赏如此简约实际的东西，不记下来有点可惜。

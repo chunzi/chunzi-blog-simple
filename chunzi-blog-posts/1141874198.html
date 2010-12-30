@@ -1,0 +1,15 @@
+Catalyst::Plugin::Authentication::Credential::CHAP
+
+用户认证，通常是用户提交密码原文，通过 HTTP 协议，发送到服务器。然后程序或者直接比对密码原文，或者按一定的不可逆算法编码后和系统中预存的密码比较。进一步，为了在传输层上能安全传递，通常会选择 https 协议加密传输，不过这需要服务器端的配置。
+
+现在有另一种方法，在客户端对用户输入的密码加密，然后再发送到服务器。这个工作交给 JavaScript 来做，看这里：
+
+<a href="http://pajhome.org.uk/crypt/md5/">http://pajhome.org.uk/crypt/md5/</a>
+
+提供了三种(MD4,MD5,SHA-1)三种加密算法的 js 实现。拿来用就是了，很简单。Yahoo! 在它的非 https 的相关登入页就使用了这些脚本。
+
+好，回过头来看标题，新出来的一个 Catalyst 的用户认证后端，名字叫 CHAP 。那么什么是 CHAP 呢？Challenge Handshake Authentication Protocol ，hoho，我也是 Google 来的，明白了，是一种协议，而且是认证协议。<a href="http://www.devarticles.com/c/a/JavaScript/Building-a-CHAP-Login-System-Coding-ServerSide-Random-Seeds/" target="_blank">这里</a>有些关于具体实现的介绍。不过我还是关心如何在 Catalyst 里面使用，看文档：
+
+<a href="http://search.cpan.org/~rdrousies/Catalyst-Plugin-Authentication-Credential-CHAP-0.01/lib/Catalyst/Plugin/Authentication/Credential/CHAP.pm">http://search.cpan.org/~rdrousies/Catalyst-Plugin-Authentication-Credential-CHAP-0.01/lib/Catalyst/Plugin/Authentication/Credential/CHAP.pm</a>
+
+大致上，由该模块负责生成所谓 Challenge 的字符串，输出登入页时，作为表单的隐含字段。用户填好密码后，由上面提到的 JS 库负责将密码原文和 Challenge 字符串相加后加密编码，然后发送该编码到服务器。该模块则提供相应的后端处理，你什么都不用管，照常用 $c->login 就是了。

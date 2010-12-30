@@ -1,0 +1,22 @@
+Catalyst::View::TT 更新到 0.14
+
+这次更新除了 fix 一些 bug 之外，还提供一些新的特性，所以有必要了解一下。
+
+原来默认使用 Template::Timer 来统计每个模版段落处理所消耗的时间，现在即便在 debug 模式下也不会启用该功能，除非在配置中指定：
+<pre>    MyApp-&gt;config({
+        'MyApp::V::TT' =&gt; {
+            TIMER =&gt; 1,
+        },
+    });</pre>
+原来模版文件是放在 root 目录下面的，现在不这样做了。原先我就奇怪，root 下面基本上都是 public 的东西，为何 template 也放在其中，所以我自己写的时候都在自己的 view 里面定义好 INCLUDE_PATH 的，不过现在好了，直接在外面写好配置：
+<pre>    our $ROOT = '/home/dent/catalyst/MyApp';
+
+    MyApp-&gt;config({
+        name     =&gt; 'MyApp',
+        root     =&gt; $ROOT,
+        'MyApp::V::TT' =&gt; {
+            INCLUDE_PATH =&gt; ["$ROOT/templates/src", "$ROOT/templates/lib"],
+            PRE_PROCESS  =&gt; 'config/main',
+            WRAPPER      =&gt; 'site/wrapper',
+        },
+    });</pre>

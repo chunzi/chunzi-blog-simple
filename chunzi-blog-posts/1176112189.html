@@ -1,0 +1,9 @@
+labs.chunzi.org/imgred
+
+看到一则新闻说，<a href="http://imgred.com">有个网站</a>提供图片的转发。因为如果你写 blog 的时候引用了人家网站上的图片，又如果人家嫌你无谓地耗去了带宽资源，于是禁止对他自己以外的站点的引用，那你的这张图片就不再能显示了。所以这个 ImgRed 网站很大方的提供了这样一种方式，如果你在要引用的图片的连接之前加上 http://imgred.com/ 就可以让它帮你提供图片资源。第一次访问之后，ImgRed 就会缓存这张图片，以后都直接由它自己提供。非常大方呀。而今天有看到它更大方地拿出自己的<a href="http://imgred.com/Code.html">代码</a>和大家分享。
+
+虽然看不到什么可以赚钱的地方，不过这种创意还是比较有意思的。没想到过。不过每个 Image URL 再加上 ImgRed 的头，貌似很长的样子，如果用 tinyurl 之类的缩短一下就好了。就这样一想，不经意间就有了一个新的 Meshup。多简单阿，做个工具页面，你给出图片的 URL 然后我给你短小精悍的 URL ，然后旁边放个 Google 广告，用的资源都不需要我自己提供。
+
+于是花了一点点时间，做了这个：<a href="http://labs.chunzi.org/imgred/">http://labs.chunzi.org/imgred/</a>
+
+代码很简单，使用 <a href="http://search.cpan.org/perldoc?WWW::Shorten">WWW::Shorten</a> 模块来实现缩短 URL，使用<a href="http://ajaxian.com/archives/auto-copy-to-clipboard">这篇文章</a>提示的方法自动把结果保存到剪贴板。最后加上 Digg 图标。

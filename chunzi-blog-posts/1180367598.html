@@ -1,0 +1,9 @@
+Ubuntu 升级内核后的 VPN
+
+Ubuntu 照例自动 update 后改用 2.6.20-16-generic 内核。于是原来的 Cisco VPN Client 不好用了。重新编译也不行。此路不通改走他路。直接使用 vpnc：
+<pre>sudo apt-get install vpnc
+wget http://svn.unix-ag.uni-kl.de/vpnc/trunk/pcf2vpnc
+chmod +x pcf2vpnc
+./pcf2vpnc ciscoprofile.pcf &gt; /etc/vpnc/ciscoprofile.conf
+sudo vpnc-connect ciscoprofile</pre>
+非常顺利。

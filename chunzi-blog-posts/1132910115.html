@@ -1,0 +1,39 @@
+javascript 实践
+
+这两天在做公司的项目，为了更好的用户体验，我在界面上做足了功夫，当然也离不开 Javascript。
+
+以前用 prototype.js 的时候，只是参照 HTML::Prototype 中的文档，照葫芦画瓢，未得深意。后来从 fayland 的共享连接中看到了 prototype.js 的非官方版本的中文翻译，大致看了下，才知道自己错过了很多东西。
+
+于是打印出来，在回家的路上通读了一遍，小有收获。起码我知道可以用 $() 和 $F() 这两个简单的写法，再也不用满页面写 document.getELementById() 了，虽然我已经写起来非常熟练。此外，我经常做的一件事情 -- 显示或者隐藏某个 id 的元素 -- 再也不用直接设定 style.display = 'inline' 什么的，直接用它提供的 Element 类的 show, hide, toggle 方法即可。Javascript 其实远比以前我所认识的要丰富，除了像以前那样构造一些 function 之外，我还可以轻松的构造一个对象来做一些事情。虽然 JS 没有像 Perl 一样的 Hash 数据结构可以直接调用，不过可以用 Object 来代替。
+
+prototype.js 被提到的时候，通常作为 Ajax 技术而被谈论。在看过这篇文章之后，你就该了解，prototype 叫做原型的道理，就说明了它是构建于 Ajax 这种技术之上的，Ajax 只不过是它默认提供的原型之一。prototype.js 的目的是要简化人们的日常工作，提供更为快捷有效的方法来让人们直接在业务层上考虑问题。同时作为对现有的 Javascript 以及对 DOM 操作的扩展，提供了更强有力的后援。所以在我看来，Prototype.js 好比是 Perl 里面的 Module。那么是不是我将来的关于 Javascript 的操作也可以自己扩展出一套 module 来简化我自己的工作呢？当然可以！Rico (rico.js) 什么的就是在它的基础上继续扩展衍生的产物。看看 prototype.js 的源代码吧，并非讳莫如深，仔细研读之下，甚至你可以自己动手修改扩展它的功能。
+
+在自己的项目中，当文本输入框中的输入变化的时候，我希望在展示区域动态的现实当前的内容。而当用户按下 Enter 键（包括 Table 键）的时候，我希望能够对输入内容作出检查并跳转到下一个 card （并非 form 的 submit）。前面的好办，在 input 标签后面写上 onkeyup="apply();" 即可，可 Enter/Table 怎么处理呢？嗬嗬，合起来，自己写个 Watcher 类：
+
+<pre><code>Watcher = Class.create();
+Watcher.prototype = {
+	initialize: function(element, apply_func ) {
+		this.element = $(element);
+		this.apply_func = apply_func;
+		this.eventKeypress  = this.keyPress.bindAsEventListener(this);
+		this.eventKeydown  = this.keydown.bindAsEventListener(this);
+		Event.observe(this.element, "keypress", this.eventKeypress);
+		Event.observe(this.element, "keyup", this.eventKeydown);
+	},
+	keyPress: function(event) {
+		if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN) {
+				next_card();
+		}else{
+				this.apply_func();
+		}
+	},
+	keydown: function(event) {
+		this.apply_func();
+	}
+};</code></pre>
+
+我们观察 keypress 事件，如果发生了该事件，就让 this.eventKeydown 来接手处理。而 this.eventKeydown 这个对象属性已经绑定为 keydown 这个方法的事件监听器，所以，让 this.eventKeydown 接手，实际上就是触发调用了 keydown 对应的 function 。这里的 keydown 可以理解为像 Perl 里面的匿名代码引用(code ref)。原本传入的 apply_func 也是 code ref，所以 this.apply_func 也是 code ref ，而在这个 ref 后面加上 () 就是 call the code。完美解决。HTML 里面什么都不用写。只要 new Watcher( 'text_id', apply_text ); 就可以了。
+
+后来我在使用 $() 的时候发生一个奇怪的问题。当 $() 内部调用通过 innerHTML 插入的某个元素的 id 的时候，如 $(test_id) 会报告 test_id 未定义。为此我困惑了很久，还另外作了实验验证。最后发现，$() 的语法有两种用法，$(test_id) 和 $('test_id') 。不一样吗？确实不一样。用后面一种就安全得多。至少不会和既有的对象名称重复。不过 IE 下面的 Javascript 调试很麻烦，这也是为什么一直没有深入系统的学习 Javascript 的原因之一。
+
+在经历了一系列的痛苦和喜悦之后，这个世界变得越来越和谐统一了。Perl/Javascript/Ruby/... 形式不同，思想皆通。

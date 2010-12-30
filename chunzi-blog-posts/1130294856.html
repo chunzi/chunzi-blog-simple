@@ -1,0 +1,11 @@
+Mochikit
+
+Ajax 技术热起来之后，相继出现了各式各样的 Ajax 框架库。Catalyst 使用了其中的一种：Prototype 。<a href="http://mochikit.com/">Mochikit</a> 刚刚发布了 1.0 版本，虽然不是完整的关于 Ajax 处理的库，不过对于常用的一些处理，都提供了相关的函数。
+
+Mochikit 声称自己<a href="http://mochikit.com/doc/html/MochiKit/index.html">高度文档化</a>以及<a href="http://mochikit.com/tests/index.html">良好单元测试</a>。所以看起来是个可以实用的好东西。
+
+Prototype 仅仅提供在 js 内发送请求到服务器，然后照本宣科的把返回的内容给程序员进一步处理，如果服务器没有响应，或者出现意外情况，返回的可能是一堆 404,  500 错误的页面代码。Mochikit 则通过他自己的 MochiKit.Async 提供了 XMLHttpRequestError ，如果出错，会通过 alert 通知客户发生意外。
+
+MochiKit 对于 DOM 的支持也非常不错，我以前要写一堆的 function 来细化的工作，现在只要几句话就可以了。此外，Mochikit 可以直接对字符串或者数字格式化输出，比较实用和方便。
+
+它还有自己的 js <a href="http://mochikit.com/examples/interpreter/index.html">代码解释器</a>，它的交互模式借鉴了 Python 解释器。它还有自己的正则表达式引擎。个人感觉还是 DOM 这部分更加实用一些。

@@ -1,0 +1,18 @@
+<div class="post_pn">
+[% IF post_prev %]
+	<div class="post_prev">« <a href="[% c.uri_for("/post/$post_prev.uid") %]">[% post_prev.title %]</a></div>
+[% END %]
+
+[% IF post_next %]
+	<div class="post_next"><a href="[% c.uri_for("/post/$post_next.uid") %]">[% post_next.title %]</a> »</div>
+[% END %]
+<br class="clear">	
+</div>
+
+
+<div class="post">
+	<div class="title">[% post.title %]</div>
+	<div class="content">[% post.rendered %]</div>
+	<div class="date">[% post.date %]</div>
+</div>
+

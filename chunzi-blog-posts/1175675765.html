@@ -1,0 +1,11 @@
+Perforce 第一印象
+
+不好。
+
+因为我更喜欢 Subversion，意图明确干净。p4 用起来好罗嗦，<code>checkout</code> 还要先给出模块名，然后 <code>sync</code> 出来，不如 <code>svn co</code> 那样清爽。<code>svn mv</code> 的工作硬要
+<pre>$ p4 integrate old new
+$ p4 delete old
+$ p4 submit</pre>
+这样一番劳累才行。
+
+公司这次全面将 CVS 切换到 Perforce，早上收到 manager 的预告信，下午就放出了相关的资料。不过大公司果然有大派头，这次迁移，非但给出了详尽的使用文档和规范，还提供了供学习和测试的服务器，另外还为不同客户端制作了安装脚本，同时放出各个命令操作的视频教程，真可谓用心良苦啊。早上建议使用 Subversion + Trac 的建议算是流产了。不过刚开始有所了解，希望日后能有新的良好体验。

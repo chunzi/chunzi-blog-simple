@@ -1,0 +1,21 @@
+绝对酷之 Beryl
+
+在优化字体使用 Mac 上的 STheiti 和 Lucida Grande 之后，想要 be cool 的我实在耐不住尝试 Beryl 的冲动。原本以为会不太顺利，要修改很多配置文件，还可能会出现意外，不过竟然一路绿灯，爽得不行！
+
+公司的电脑配置还算满不错的，显卡是板载的 Interl 915G 芯片组的，所以参考<a href="http://forum.ubuntu.org.cn/viewtopic.php?t=29748">这篇帖子</a>后，短短的几分钟就大功告成。
+
+简单来说，就是这样：
+
+<pre>echo 'deb http://www.beerorkid.com/compiz edgy main-edgy' >> /etc/apt/sources.list
+wget http://www.beerorkid.com/compiz/quinn.key.asc -O - | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install beryl-core beryl-plugins beryl-plugins-data \\
+ emerald beryl-settings beryl-manager beryl beryl-dev emerald-themes</pre>
+
+然后到菜单：系统->首选项->会话->启动程序，添加 <code>/usr/bin/beryl-manager</code> 如此启动的时候就用 Beryl 窗口管理器。然后重启。当然我用的是 Ubuntu 6.10。
+
+然后试着按照<a href="http://hi.baidu.com/benben/blog/item/3bf97bcb1b25a21fbe09e6f3.html">这里的介绍</a>玩玩看！当然也可以自己设定快捷键。
+
+遗憾的是，我原来用 win 键关联打开一个终端窗口，现在不能用了，因为 Beryl 使用了很多 win 开头的键，暂时还没什么好的解决办法。
+
+我一直欣赏 Apple 的风格，曾经一度想着要入手一台 Apple 机器，不过实在是太贵了，我也不是有钱消受的人。不过现在有了 Ubuntu，什么 Vista, Apple, Mac 都不重要了。

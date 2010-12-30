@@ -1,0 +1,7 @@
+keyCode 和 charCode
+
+为了提取垃圾邮件中的中文字串，并自动转化为正则表达式需要的形式，我写了一个 Web 应用程序。只要鼠标选中字串，然后按下某个键，即可通过 Ajax 提交到后端转化和测试。自然我用的是 Catalyst 和 prototype.js。
+
+原本我设定的是 Insert 键关联提交操作。而现在，我需要在提交的同时指定被选字串的类型，比如说邮件地址用 e 键，或者手机号码用 m 键，等等。这在当时开发的时候就发现， FireFox 下， prototype.js  只能返回功能键的 KeyCode，如果是字母，则一律是 0。我自然是不愿意因此屈就去用 IE 的，更何况我现在 Ubuntu 下面也没有 IE。而我有不想用 Mochikit，虽然实验过它没问题。我怀疑是 prototype.js 的问题，不过本着 Agile 开发的精神，没有深究下去。
+
+这次，我决定解决这个问题。当然还是看了番源代码，做了些测试，未果。于是 Google，仔细找了下，发现枫岩的<a href="http://blog.iecn.net/blog.php?do=showone&amp;tid=1521">这篇文章</a>，点醒我梦中人。简单的说，在 FireFox 中，KeyCode 返回 0 就用 charCode。于是我猜想 Mochikit 也是这样实现的：<a href="http://svn.mochikit.com/mochikit/trunk/MochiKit/Signal.js">在 Signal.js 里</a>第 135 行起定义的 key 函数非但给出了健壮的封装，还有一堆注解。

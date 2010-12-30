@@ -1,0 +1,18 @@
+<div class="pages">
+[% FOREACH p = [1..last_page] %]
+	<span class="page [% 'page_here' IF p == page %]"><a href="[% c.uri_for("/page/$p") %]">[% p %]</a></span>
+[% END %]
+</div>
+
+[% FOREACH post = paged_posts %]
+<div class="post">
+	<div class="title"><a href="[% c.uri_for("/post/$post.uid") %]">[% post.title %]</a></div>
+	<div class="content">[% post.rendered %]</div>
+	<div class="date">[% post.date %]</div>
+</div>
+	[% count = count + 1 %]
+	[% LAST IF count == 10 %]
+[% END %]
+
+
+

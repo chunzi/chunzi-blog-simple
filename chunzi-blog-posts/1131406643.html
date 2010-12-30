@@ -1,0 +1,25 @@
+Dojo Rich WYSIWYG Editor
+
+作为 <a href="http://dojotoolkit.org/">Dojo Toolkit</a> 的一部分，在即将推出 2.0 版本之前，这个超文本的所见即所得文本编辑器先行推出。它支持各种浏览器，包括 Safari ，<a href="http://opensource.org/licenses/afl-2.1.php">版权</a>和 Dojo 一样。
+
+它的设计原则，
+
+<ul>
+<li>不要遗弃 undo （CRTL+Z）</li>
+<li>提供所见即所得，不提供源代码编辑</li>
+<li>数据丢失是绝对不可原谅的</li>
+</ul>
+
+而要使用该组件，除了通常的引用 js 代码进来之外，你只需要
+
+<pre>&lt;div "class"="dojo-Editor"&gt;
+some content
+&lt;/div&gt;</pre>
+
+就可以了，绝对是我见过的最简单的一个。当然，你可以通过增加标签属性来配置编辑器
+
+<pre>&lt;div dojoType="Editor" items="textGroup;|;listGroup;"&gt;
+    some content
+&lt;/div&gt;</pre>
+
+具体的介绍和文档<a href="http://dojotoolkit.org/docs/rich_text.html">在此</a>。

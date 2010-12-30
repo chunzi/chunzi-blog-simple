@@ -1,0 +1,48 @@
+Catalyst 5.49_03 发布
+
+离我们期望的稳定版本 5.5 越来越近了。
+
+Changelog:
+
+         - 修复了 $c-&gt;req-&gt;{path} 的后向兼容性
+         - 可以在 ENV 中设定禁用 debug 输出
+         - 为 catalyst.pl 增加了 -scripts 选项，以便更新脚本代码
+         - 修改 helpers 代码，原来默认使用短名称 C ，现在默认使用长名称 Controller
+         - 增加了 Catalyst::Controller, Catalyst::Model 和 Catalyst::View 三个基类
+         - 增加了 JavaScript  调试屏幕 ，以便显示特定的代码 dump
+         - 增加了 _DISPATCH, _BEGIN, _AUTO, _ACTION 和 _END 动作
+         - 增加了多进程外部 FastCGI 支持 (参考 myapp_fastcgi.pl -help) (Sam Vilain)
+         - 在 HTTP 引擎内部的重新启动过程现在可以在父进程关闭时正常退出
+         - 改善了内部重起循环的性能
+         - 现在重起机制能够根据新加到系统应用中的文件（新增文件导致上级目录的 mtime 更新）触发工作
+         - 现在重起机制能够根据正常应对系统用到的模块的变化。
+         - 在 TestApp  内修复了内存溢出问题。
+
+大多可见的变化如下：
+
+1. 长类型 (Controller/Model/View) 为默认，短名称 (C/M/V)  仍然可用，不过需要加上 "-short" 参数：
+
+<pre>    catalyst.pl -short MyApp
+     script/myapp_create.pl -short controller Foo
+     script/myapp_create.pl -short model Bar
+     script/myapp_create.pl -short view Baz</pre>
+
+2. Catalyst::Base 已经被分为多个更为简洁的基类
+
+<pre>     package MyApp::Controller::Foo;
+     use base 'Catalyst::Controller';
+     1;
+
+     package MyApp::Model::Bar;
+     use base 'Catalyst::Model';
+     1;
+
+     package MyApp::View::Baz;
+     use base 'Catalyst::View';
+     1;</pre>
+
+老的 Catalyst::Base 仍然可用，也没有计划在将来完全摒弃它。
+
+3. 你现在可以只用一行命令来更新你的 helper 脚本
+
+<pre>     catalyst.pl -nonew -scripts MyApp</pre>

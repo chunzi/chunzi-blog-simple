@@ -1,0 +1,13 @@
+bash -i + tee vs. script
+
+之前我用 <code>script</code> 命令记录 shell 中的输入输出数据，或者到一个普通日志文件，或者到一个管道文件。
+
+重新阅读了《BSD HACKS》Hack #11 之后，这才意识到，<code>script</code> 实质上是重新创建了一个新的 shell 。所以类似的有：
+
+<pre>$ bash -i 2 > &1 | tee shell.log</pre>
+
+<code>-i</code> 参数使新的 shell 按交互模式（interactive）启动，然后将 STDERR 重定向到 STDOUT，再通过管道把 shell 的输入（我们在 shell 下键入的）输出（命令输出的信息和错误信息）都传给命令 <code>tee</code>。<code>tee</code> 是个简单而有用的小工具，它接受输入，并同时输出到文件和 STDOUT。所以这里 <code>tee</code> 一面让我们看到 shell 的交互情况，一面悄悄地把它们记录在案。自然，shell.log 就是保存的日志，可以在另一个窗口中实时观看变化：
+
+<pre>$ tail -f shell.log</pre>
+
+很好玩吧~

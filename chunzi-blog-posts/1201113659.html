@@ -1,0 +1,9 @@
+SQLite 的文件大小
+
+
+<ul>
+	<li>发现清空 100＋MB 数据后，文件还是原来的大小。</li>
+	<li>找到：“当你从 SQLite 删除数据之后，未使用的磁盘空间被添加到一个内在的“空闲列表”中用于存储你下次插入的数据。磁盘空间并没有丢失，但是也不向操作系统返回磁盘空间。”</li>
+	<li>用 <code>vacuum</code> 命令手工清空。<a href="http://www.sqlite.org/lang_vacuum.html">参考</a>。</li>
+	<li>或者使用 <code>pragma auto_vacuum=1;</code>。<a href="http://www.sqlite.org/pragma.html#pragma_auto_vacuum">参考</a>。</li>
+</ul>

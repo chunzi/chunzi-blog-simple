@@ -1,0 +1,37 @@
+Catalyst 5.58 正式支持 PAR
+
+目前的 5.57 还有些 bug ，不过当前 trunk 里面的（未来的 5.58）将正式支持 PAR 封装应用为一个独立的程序。这样我们用 Catalyst 开发的产品就可以轻松的卖给那些使用普通虚拟主机的用户了。
+
+这里是简单的构建 PAR 包的步骤：
+
+把下面这些代码添加到 Makefile.PL 里面：
+
+<pre>catalyst_par_core();
+catalyst_par();</pre>
+
+然后执行：
+
+<pre>perl Makefile.PL; make test; perl Makefile.PL</pre>
+
+然后用 PAR 模块的 pp 打包：
+
+<pre>pp -o myapp myapp.par</pre>
+
+所生成的 myapp 就是可执行的二进制文件了。可以连同帮助文件，版权声明一起压缩打包后发布了。
+
+sri 提供了 OSX 下面的演示打包文件：<a href="http://files.oook.de/myapp-osx">http://files.oook.de/myapp-osx</a>
+
+<pre><code>sri@odyssey:~/ &gt; ./myapp-osx
+Usage:
+     [parl] myapp[.par] [script] [arguments]
+
+   Examples:
+     parl myapp.par myapp_server.pl -r
+     myapp myapp_cgi.pl
+
+   Available scripts:
+     myapp_cgi.pl
+     myapp_create.pl
+     myapp_fastcgi.pl
+     myapp_server.pl
+     myapp_test.pl</code></pre>

@@ -1,0 +1,13 @@
+一些 Perl 模块
+
+<a href="http://search.cpan.org/~kirsle/Chatbot-Alpha-2.03/lib/Chatbot/Alpha.pm"><strong>Chatbot::Alpha</strong></a>
+
+公司内部要做个简单的工单流转，我突然想到用 MSN 来提示接手人，MSN 的 bot 倒是可以用了，我又想把它弄得聪明些，正好看到这个模块。不过不知道对中文的解析判断如何，anyway，应该是个好的起点。这是个人工智能应答系统。
+
+<a href="http://search.cpan.org/~dwheeler/Class-Meta-0.51/lib/Class/Meta.pm"><strong>Class::Meta</strong></a>
+
+通常自己构建对象都用 Class::Accessor ，简单实用，可以快速构建用来存储/读取对象数据的对象方法。也可以自己重载相应的 Accessor 然后对某些数据作验证。Class::Tangram 则是让你自己定义某些对象的数据结构，然后再用这些定义好的 scheme 生成的类来快速构建复杂的对象。而 Class::Meta 则把两者结合起来，加上 Params::Validate ，成为一个通用的，定义对象数据或者类属性，并带有数据合法验证机制的，代码生成工具。这样，我们可以更快的构建项目原型，只需告诉它我想要做什么，而不用考虑如何去做。
+
+<a href="http://search.cpan.org/~dmuey/Unix-PID-v0.0.4/PID.pm"><strong>Unix::PID</strong></a>
+
+系统管理员比较关心这个。一般大家的做法是用 ps 看当前运行的进程的 pid ，然后 kill 。如果情况比较复杂，比如有一堆进程需要处理，可能需要些个简单的 shell ，sed 后 awk ，想办法弄出 pid 然后再处理。或者有些进程会写个 .pid 的文件，保存着当前运行的 pid 。不过既然有了这个模块，我们应该更抽象地去做这些事情。让它来帮助处理常见的工作。更灵活，也更易扩展。

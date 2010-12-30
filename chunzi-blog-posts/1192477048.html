@@ -1,0 +1,23 @@
+SQLite 调优点滴
+
+发现在把一堆邮件导入到 SQLite 数据库的过程，异乎寻常地慢， 而同时在另一个程序中读取这个数据库时，等了半天，竟冒出一句：
+
+<code class="error">database is locked(5) at dbdimp.c line 402</code>
+
+显然，出现条件竞争了。这种问题一定有解决办法，于是查阅官方文档<a href="http://http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuning">关于调优的部分</a>，注意到这样一个事实：每次 SQLite 进行一次 update 操作，都要打开并关闭一次数据库文件。所以像我这样大批量的 update 操作，有 100 次 update 就要打开关闭文件 100 次。所以慢且一直处在锁定状态也不足为奇了。
+
+解决办法是使用事务操作：
+
+<pre><code>BEGIN TRANSACTION;
+UPDATE table1 SET col1='1';
+UPDATE table1 SET col1='2';
+...
+INSERT INTO table1(col1) VALUES ('2');
+...
+COMMIT TRANSACTION;</code></pre>
+
+如此所有事情都在内存里搞定，然后再一次刷到文件中，干净利落。
+
+使用 DBIx::Class 的话，可以把所有的代码都扔到这里面：
+
+<code>eval {$schema-&gt;txn_do(sub { ... }) };</code>

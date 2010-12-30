@@ -1,0 +1,15 @@
+Module::Starter 和 Reformed Perl
+
+如果要开始写 Perl 模块，以前都是用 h2xs 来做，现在可以用 <a href="http://search.cpan.org/~rjbs/Module-Starter/lib/Module/Starter.pm">Module::Starter</a> 来帮助完成。
+
+<strong>Reformed Perl</strong> 是什么东西？<a href="http://www.netalive.org/swsu/archives/2004/09/reformed_perl_t.html">看看这里</a>，它让 Perl 5 的面向对象语法可以变得更为简洁，更像 Ruby:
+
+<pre>
+    package Child instance_method();
+        class-&gt;static_method();
+        base-&gt;super_class_method();
+    }
+    ...
+</pre>
+
+有点疯狂阿~~ 如果这样的话，用它来写 Catalyst 会不会更加爽呢？

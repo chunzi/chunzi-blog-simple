@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Chunzi's blog</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="[% c.uri_for('/static/style.css') %]" type="text/css" />
+</head>
+<body>
+
+<div id="header"><a href="/">Chunzi</a></div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="98%">
+<tr><td valign="top">
+<div id="container">
+	[% PROCESS $LAYOUTS.shift %]
+</div>
+</td>
+<td valign="top" id="sidebar_container">
+<div id="sidebar">
+	[% INCLUDE sidebar.html %]
+</div>
+</td>
+</tr>
+</table>
+
+
+[% INCLUDE "twitter-timeline-js.html" %]
+[% INCLUDE "google-analytics-js.html" %]
+</body>
+</html>
