@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+use Path::Class;
+use File::Slurp;
+use DateTime;
+
+my $dir   = dir( 'chunzi-blog-posts' );
+my @files = $dir->children;
+
+for my $file ( @files ) {
+
+    my ( $epoch ) = split /\./, $file->basename;
+    my $ctime     = DateTime->from_epoch( epoch => $epoch );
+
+    my $name   = sprintf 'dist/%s.md', $ctime->strftime( '%y%m%d-%H%M' );
+    my $target = file( $name );
+
+    my $body = read_file( $file );
+    $body = '# '. $body;
+
+    write_file( $target, $body );
+
+    printf "%s\n", $target;
+
+}
+
